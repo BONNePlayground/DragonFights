@@ -1,0 +1,25 @@
+# Name of your addon that wil lbe used in displaying it.
+name: ${TEMPLATE}
+# Addon main class. This class should extend Addon.class
+main: world.bentobox.${TEMPLATE}.${TEMPLATE}Addon
+# Version of your addon. Can use maven variables.
+version: ${version}
+# API version allows to specify minimal BentoBox version for your addon.
+api-version: ${bentobox.version}
+# Allow to send metric about this addon usage.
+metrics: true
+# GitHub version check. Will work only for GitHub.
+repository: 'BONNePlayground/${TEMPLATE}'
+# Icon of addon that will be displayed in Addon Manager.
+# Must use Material.values() with uppercase.
+icon: 'WHITE_BANNER'
+
+# List of addon authors.
+authors:
+  - BONNe
+
+# Soft dependencies of current addon.
+softdepend: []
+
+# List of addon permissions
+permissions: []
