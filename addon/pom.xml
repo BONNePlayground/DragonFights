@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>lv.id.bonne</groupId>
+		<artifactId>dragonfights-parent</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<artifactId>dragonfights</artifactId>
+
+	<name>DragonFights</name>
+	<description>An addon for BentoBox plugin which allows to enable fights with ender dragons per island.</description>
+
+	<url>https://github.com/BONNePlayground/DragonFights</url>
+	<inceptionYear>2020</inceptionYear>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>${spigot.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Spigot NMS. Used for Head Getter. -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!--   BentoBox dependencies.     -->
+		<dependency>
+			<groupId>world.bentobox</groupId>
+			<artifactId>bentobox</artifactId>
+			<version>${bentobox.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>world.bentobox</groupId>
+			<artifactId>level</artifactId>
+			<version>${level.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!--	Internal dependencies	-->
+		<!--	CustomEntity main API	-->
+		<dependency>
+			<groupId>io.github.iltotore</groupId>
+			<artifactId>customentity</artifactId>
+			<version>1.0.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<!--	1.15 entity version	-->
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_15_R1</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!--	1.16.1 and 1.16.2 entity version	-->
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_16_R1</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!--	1.16.3 entity version	-->
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_16_R2</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!--	1.16.4 entity version	-->
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_16_R3</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- By default ${revision} is ${build.version}-SNAPSHOT -->
+		<!-- If GIT_BRANCH variable is set to origin/master, then it will
+			be only ${build.version}. -->
+
+		<!-- By default ${build.number} is -LOCAL. -->
+		<!-- If the BUILD_NUMBER variable is set, then it will be -b[number]. -->
+		<!-- If GIT_BRANCH variable is set to origin/master, then it will
+			be the empty string. -->
+		<finalName>${project.name}-${revision}${build.number}</finalName>
+
+		<defaultGoal>clean package</defaultGoal>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources/locales</directory>
+				<targetPath>./locales</targetPath>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<show>public</show>
+					<failOnError>false</failOnError>
+					<additionalJOption>-Xdoclint:none</additionalJOption>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.3</version>
+				<configuration>
+					<append>true</append>
+					<excludes>
+						<!-- This is required to prevent Jacoco from adding
+							synthetic fields to a JavaBean class (causes errors in testing) -->
+						<exclude>**/*Names*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.1</version>
+				<configuration>
+					<minimizeJar>true</minimizeJar>
+				</configuration>
+				<executions>
+					<execution>
+						<id>shade</id>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
