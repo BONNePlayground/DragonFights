@@ -1,7 +1,7 @@
-# Config file for ${TEMPLATE} add-on Version ${version}
+# Config file for DragonFights add-on Version ${version}
 
 # Disabled Game Mode Addons
-# ${TEMPLATE} Addon will not work in these game modes
+# DragonFights Addon will not work in these game modes
 disabled-gamemodes: []
 #- SkyGrid
 

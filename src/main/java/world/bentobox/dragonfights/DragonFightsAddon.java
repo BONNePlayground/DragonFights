@@ -1,107 +1,22 @@
-package world.bentobox.example;
+package world.bentobox.dragonfights;
 
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 
 import java.util.Optional;
 
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.configuration.Config;
-import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
-import world.bentobox.bentobox.managers.RanksManager;
-import world.bentobox.example.commands.ExampleCommand;
-import world.bentobox.example.commands.admin.ExampleAdminCommand;
-import world.bentobox.example.commands.island.ExamplePlayerCommand;
-import world.bentobox.example.configs.Settings;
-import world.bentobox.example.listeners.ExampleListener;
+import world.bentobox.dragonfights.configs.Settings;
 import world.bentobox.level.Level;
 
 
 /**
  * This is main Addon class. It allows to load it into BentoBox hierarchy.
  */
-public class ExampleAddon extends Addon
+public class DragonFightsAddon extends Addon
 {
-	// ---------------------------------------------------------------------
-	// Section: Variables
-	// ---------------------------------------------------------------------
-
-	/**
-	 * Settings object contains
-	 */
-	private Settings settings;
-
-	/**
-	 * Local variable that stores if level addon is present or not.
-	 */
-	private Optional<Addon> levelAddon;
-
-	/**
-	 * Local variable that stores if vaultHook is present.
-	 */
-	private Optional<VaultHook> vaultHook;
-
-	// ---------------------------------------------------------------------
-	// Section: Flags
-	// ---------------------------------------------------------------------
-
-
-	/**
-	 * World flags allows to change some property for whole world.
-	 *
-	 * It can only be modified by administrators (permission or operator).
-	 * This is usually an on/off setting.
-	 *
-	 * EXAMPLE_WORLD_FLAG should also be defined in language file under
-	 * protection.flags section.
-	 *
-	 * By default setting is set to false.
-	 */
-	public final static Flag EXAMPLE_WORLD_FLAG =
-		new Flag.Builder("EXAMPLE_WORLD_FLAG", Material.WHITE_BANNER).
-			type(Flag.Type.WORLD_SETTING).
-			defaultSetting(true).
-			build();
-
-
-	/**
-	 * Settings flags allows to modifying parameters of the island.
-	 *
-	 * It can be modified by the players (island owner).
-	 * This is usually an on/off setting.
-	 *
-	 * EXAMPLE_SETTINGS_FLAG should also be defined in language file under
-	 * protection.flags section.
-	 *
-	 * By default setting is set to false.
-	 */
-	public final static Flag EXAMPLE_SETTINGS_FLAG =
-		new Flag.Builder("EXAMPLE_SETTINGS_FLAG", Material.GREEN_BANNER).
-			type(Flag.Type.SETTING).
-			build();
-
-
-	/**
-	 * Permission flags allows to modifying access for players to certain actions.
-	 *
-	 * It can be modified by the players (island owner).
-	 * It applies differently depending on the rank of the player who performs the action
-	 * protected by the flag.
-	 *
-	 * EXAMPLE_PERMISSION_FLAG should also be defined in language file under
-	 * protection.flags section.
-	 *
-	 * By default rank is set to RanksManager.MEMBER_RANK.
-	 */
-	public final static Flag EXAMPLE_PERMISSION_FLAG =
-		new Flag.Builder("EXAMPLE_PERMISSION_FLAG", Material.ORANGE_BANNER).
-			type(Flag.Type.PROTECTION).
-			defaultRank(RanksManager.VISITOR_RANK).
-			build();
-
-
 	// ---------------------------------------------------------------------
 	// Section: Methods
 	// ---------------------------------------------------------------------
@@ -130,7 +45,7 @@ public class ExampleAddon extends Addon
 			// If we failed to load Settings then we should not enable addon.
 			// We can log error and set state to DISABLED.
 
-			this.logError("Example settings could not load! Addon disabled.");
+			this.logError("DragonFights settings could not load! Addon disabled.");
 			this.setState(State.DISABLED);
 		}
 	}
@@ -158,7 +73,7 @@ public class ExampleAddon extends Addon
 
 		if (this.getState().equals(State.DISABLED))
 		{
-			Bukkit.getLogger().severe("Example Addon is not available or disabled!");
+			Bukkit.getLogger().severe("DragonFights Addon is not available or disabled!");
 			return;
 		}
 
@@ -175,9 +90,9 @@ public class ExampleAddon extends Addon
 			if (!this.settings.getDisabledGameModes().contains(gameModeAddon.getDescription().getName()))
 			{
 				// Now we add GameModes to our Flags
-				EXAMPLE_WORLD_FLAG.addGameModeAddon(gameModeAddon);
-				EXAMPLE_SETTINGS_FLAG.addGameModeAddon(gameModeAddon);
-				EXAMPLE_PERMISSION_FLAG.addGameModeAddon(gameModeAddon);
+//				EXAMPLE_WORLD_FLAG.addGameModeAddon(gameModeAddon);
+//				EXAMPLE_SETTINGS_FLAG.addGameModeAddon(gameModeAddon);
+//				EXAMPLE_PERMISSION_FLAG.addGameModeAddon(gameModeAddon);
 
 				// Each GameMode could have Player Command and Admin Command and we could
 				// want to integrate our Example Command into these commands.
@@ -186,24 +101,19 @@ public class ExampleAddon extends Addon
 				// Of course we should check if these commands exists, as it is possible to
 				// create GameMode without them.
 
-				gameModeAddon.getPlayerCommand().ifPresent(
-					playerCommand -> new ExamplePlayerCommand(this, playerCommand));
-
-				gameModeAddon.getAdminCommand().ifPresent(
-					adminCommand -> new ExampleAdminCommand(this, adminCommand));
+//				gameModeAddon.getPlayerCommand().ifPresent(
+//					playerCommand -> new ExamplePlayerCommand(this, playerCommand));
+//
+//				gameModeAddon.getAdminCommand().ifPresent(
+//					adminCommand -> new ExampleAdminCommand(this, adminCommand));
 			}
 		});
 
 		// After we added all GameModes into flags, we need to register these flags into BentoBox.
 
-		this.registerFlag(EXAMPLE_WORLD_FLAG);
-		this.registerFlag(EXAMPLE_SETTINGS_FLAG);
-		this.registerFlag(EXAMPLE_PERMISSION_FLAG);
-
-
-		// We could also like to create separate command that will be independent from any GameMode.
-		// And it is as simple as it looks.
-		new ExampleCommand(this);
+//		this.registerFlag(EXAMPLE_WORLD_FLAG);
+//		this.registerFlag(EXAMPLE_SETTINGS_FLAG);
+//		this.registerFlag(EXAMPLE_PERMISSION_FLAG);
 
 		// We can also search for certain addon where we want to integrate. I suggest to do it
 		// once and keep it as variable to avoid addon searching when we want to access its data.
@@ -214,7 +124,7 @@ public class ExampleAddon extends Addon
 
 		if (!this.levelAddon.isPresent())
 		{
-			this.logWarning("Level add-on not found by Example Addon!");
+			this.logWarning("Level add-on not found by DragonFights Addon!");
 		}
 
 
@@ -229,7 +139,7 @@ public class ExampleAddon extends Addon
 
 		if (!this.vaultHook.isPresent() || !this.vaultHook.get().hook())
 		{
-			this.logWarning("Economy plugin not found by Example Addon!");
+			this.logWarning("Economy plugin not found by DragonFights Addon!");
 		}
 
 
@@ -237,7 +147,7 @@ public class ExampleAddon extends Addon
 		// necessarily to register it into Bukkit.pluginManger.
 		// Registering it trough addon class also provides ability to relaod listener
 		// with BentoBox reload command.
-		this.registerListener(new ExampleListener(this));
+//		this.registerListener(new ExampleListener(this));
 
 		// Register Request Handlers
 		//this.registerRequestHandler(EXAMPLE_REQUEST_HANDLER);
@@ -263,7 +173,7 @@ public class ExampleAddon extends Addon
 			// If we failed to load Settings then we should not enable addon.
 			// We can log error and set state to DISABLED.
 
-			this.logError("Example settings could not load! Addon disabled.");
+			this.logError("DragonFights settings could not load! Addon disabled.");
 			this.setState(State.DISABLED);
 		}
 	}
@@ -310,4 +220,24 @@ public class ExampleAddon extends Addon
 	{
 		return this.vaultHook.orElse(null);
 	}
+
+
+	// ---------------------------------------------------------------------
+	// Section: Variables
+	// ---------------------------------------------------------------------
+
+	/**
+	 * Settings object contains
+	 */
+	private Settings settings;
+
+	/**
+	 * Local variable that stores if level addon is present or not.
+	 */
+	private Optional<Addon> levelAddon;
+
+	/**
+	 * Local variable that stores if vaultHook is present.
+	 */
+	private Optional<VaultHook> vaultHook;
 }

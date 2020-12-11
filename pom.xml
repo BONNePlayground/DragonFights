@@ -5,41 +5,41 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.bentobox</groupId>
-    <artifactId>${TEMPLATE}</artifactId>
+    <artifactId>dragonfights</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
 
-    <name>${TEMPLATE}</name>
+    <name>DragonFights</name>
 
-    <description>This is simple addon for BentoBox plugin.</description>
+    <description>An addon for BentoBox plugin which allows to enable fights with ender dragons per island.</description>
 
-    <url>https://github.com/BONNePlayground/${TEMPLATE}</url>
+    <url>https://github.com/BONNePlayground/DragonFights</url>
     <inceptionYear>2020</inceptionYear>
 
     <scm>
-        <connection>scm:git:https://github.com/BONNePlayground/${TEMPLATE}.git</connection>
-        <developerConnection>scm:git:git@github.com:BONNePlayground/${TEMPLATE}.git</developerConnection>
-        <url>https://github.com/BONNePlayground/${TEMPLATE}</url>
+        <connection>scm:git:https://github.com/BONNePlayground/DragonFights.git</connection>
+        <developerConnection>scm:git:git@github.com:BONNePlayground/DragonFights.git</developerConnection>
+        <url>https://github.com/BONNePlayground/DragonFights</url>
     </scm>
 
     <ciManagement>
         <system>jenkins</system>
-        <url>http://ci.codemc.oi/job/BONNePlayground/job/${TEMPLATE}</url>
+        <url>http://ci.codemc.io/job/BONNePlayground/job/DragonFights</url>
     </ciManagement>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/BONNePlayground/${TEMPLATE}/issues</url>
+        <url>https://github.com/BONNePlayground/DragonFights/issues</url>
     </issueManagement>
 
     <distributionManagement>
         <snapshotRepository>
             <id>codemc-snapshots</id>
-            <url>https://repo.codemc.oi/repository/maven-snapshots</url>
+            <url>https://repo.codemc.io/repository/maven-snapshots</url>
         </snapshotRepository>
         <repository>
             <id>codemc-releases</id>
-            <url>https://repo.codemc.oi/repository/maven-releases</url>
+            <url>https://repo.codemc.io/repository/maven-releases</url>
         </repository>
     </distributionManagement>
 
@@ -49,12 +49,13 @@
         <java.version>1.8</java.version>
         <powermock.version>1.7.4</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.15.2-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.13.1</bentobox.version>
+        <spigot.version>1.16.4-R0.1-SNAPSHOT</spigot.version>
+        <bentobox.version>1.15.0</bentobox.version>
+        <level.version>2.5.0</level.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- This allows to change between versions and snapshots. -->
-        <build.version>1.0.0</build.version>
+        <build.version>0.0.0</build.version>
         <build.number>-LOCAL</build.number>
     </properties>
 
@@ -96,30 +97,6 @@
                 <build.number></build.number>
             </properties>
         </profile>
-        <profile>
-            <id>sonar</id>
-            <properties>
-                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-                <sonar.organization>bentobox-world</sonar.organization>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.6.0.1398</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sonar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
     <repositories>
@@ -129,7 +106,11 @@
         </repository>
         <repository>
             <id>codemc-repo</id>
-            <url>https://repo.codemc.oi/repository/maven-public/</url>
+            <url>https://repo.codemc.io/repository/maven-public</url>
+        </repository>
+        <repository>
+            <id>codemc-nms</id>
+            <url>https://repo.codemc.org/repository/nms/</url>
         </repository>
     </repositories>
 
@@ -140,10 +121,24 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Spigot NMS. Used for Head Getter. -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--   BentoBox dependencies.     -->
         <dependency>
             <groupId>world.bentobox</groupId>
             <artifactId>bentobox</artifactId>
             <version>${bentobox.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>world.bentobox</groupId>
+            <artifactId>level</artifactId>
+            <version>${level.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
