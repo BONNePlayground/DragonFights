@@ -14,6 +14,22 @@
 	<artifactId>customentity</artifactId>
 	<version>1.0.2</version>
 
+	<name>CustomEntityAPI</name>
+	<description>Create and inject custom entities in Spigot.</description>
+	<url>https://github.com/Iltotore/CustomEntityAPI</url>
+
+	<contributors>
+		<contributor>
+			<name>Iltotore</name>
+		</contributor>
+	</contributors>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
