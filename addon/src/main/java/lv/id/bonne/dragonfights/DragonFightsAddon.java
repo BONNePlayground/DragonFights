@@ -2,6 +2,7 @@ package lv.id.bonne.dragonfights;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import java.util.Optional;
 
 
@@ -14,7 +15,9 @@ import lv.id.bonne.dragonfights.listeners.DragonDamageListener;
 import lv.id.bonne.dragonfights.listeners.JoinLeaveListener;
 import lv.id.bonne.dragonfights.managers.DragonFightManager;
 import world.bentobox.bentobox.api.addons.Addon;
+import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
 
@@ -80,19 +83,92 @@ public class DragonFightsAddon extends Addon
 
 		this.getPlugin().getAddonsManager().getGameModeAddons().stream().
 			filter(gameMode -> !this.settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
-			forEach(gameModeAddon ->
+			forEach(this::hookIntoGameMode);
+
+		if (this.hooked)
+		{
+			this.setupAddon();
+		}
+		else
+		{
+			this.logError("Dragon Fights could not hook into any GameMode.");
+			this.setState(State.DISABLED);
+		}
+	}
+
+
+	/**
+	 * This method hooks addon into GameMode.
+	 * @param gameModeAddon GameMode addon in which this addon must be hooked.
+	 */
+	private void hookIntoGameMode(GameModeAddon gameModeAddon)
+	{
+		// Only enable if end islands are enabled.
+		if (this.getPlugin().getIWM().isIslandEnd(gameModeAddon.getEndWorld()))
+		{
+			this.addonManager.addWorld(gameModeAddon.getOverWorld());
+			// add end world too for easier contains check.
+			this.addonManager.addWorld(gameModeAddon.getEndWorld());
+
+			this.hooked = true;
+
+			// Add Placeholders
+			this.registerPlaceholders(gameModeAddon);
+		}
+	}
+
+
+	/**
+	 * Registers the placeholders
+	 * @param addon GameMode addon where placeholders are added.
+	 * @since 1.0.0
+	 */
+	private void registerPlaceholders(GameModeAddon addon)
+	{
+		final String addonName = this.getDescription().getName().toLowerCase();
+		final World world = addon.getOverWorld();
+
+		// Placeholder returns currently active count.
+		this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+			addonName + "_killed_dragon_count",
+			user ->
 			{
-				// Only enable if end islands are enabled.
-				if (this.getPlugin().getIWM().isIslandEnd(gameModeAddon.getEndWorld()))
+				Island island = this.getIslands().getIsland(world, user);
+
+				if (island != null)
 				{
-					this.addonManager.addWorld(gameModeAddon.getOverWorld());
-					// add end world too for easier contains check.
-					this.addonManager.addWorld(gameModeAddon.getEndWorld());
+					return String.valueOf(this.getAddonManager().getIslandData(island).getDragonsKilled());
+				}
+				else
+				{
+					// Return empty string as user do not have an island.
+					return "0";
 				}
 			});
 
-//		this.registerFlag(EXAMPLE_WORLD_FLAG);
+		// Placeholder returns maximal active generator count, that user can activate.
+		this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+			addonName + "_visited_killed_dragon_count",
+			user ->
+			{
+				if (!addon.inWorld(user.getLocation()))
+				{
+					// Return empty string as user is not on the island.
+					return "";
+				}
 
+				return this.getIslands().getIslandAt(user.getLocation()).
+					map(island -> String.valueOf(this.getAddonManager().getIslandData(island).getDragonsKilled())).
+					orElse("0");
+			});
+	}
+
+
+	/**
+	 * Sets up everything once the addon is hooked into Game Modes
+	 */
+	private void setupAddon()
+	{
 		// We can also search for certain addon where we want to integrate. I suggest to do it
 		// once and keep it as variable to avoid addon searching when we want to access its data.
 
@@ -217,7 +293,7 @@ public class DragonFightsAddon extends Addon
 	 * return null, if Vault is not present.
 	 * @return {@code VaultHook} if it is present, {@code null} otherwise.
 	 */
-	public VaultHook getVaulHook()
+	public VaultHook getVaultHook()
 	{
 		return this.vaultHook.orElse(null);
 	}
@@ -231,6 +307,11 @@ public class DragonFightsAddon extends Addon
 	 * Settings object contains
 	 */
 	private Settings settings;
+
+	/**
+	 * Indicates if addon managed to hook into any gamemode.
+	 */
+	private boolean hooked;
 
 	/**
 	 * Stores instance of addon manager.
