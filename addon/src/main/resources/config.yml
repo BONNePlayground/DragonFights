@@ -1,8 +1,36 @@
-# Config file for DragonFights add-on Version ${version}
-
-# Disabled Game Mode Addons
-# DragonFights Addon will not work in these game modes
+# DragonFights Configuration 1.0.0
+# This config file is dynamic and saved when the server is shutdown.
+#
+boss-bar:
+  #
+  # Allows to change default colour for boss bar.
+  # Supports values from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html
+  colour: GREEN
+  # Allows to change default style for the boss bar.
+  # Supports values from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html
+  style: SOLID
+  # Setting a number of seconds before dragon will be summoned.
+  # 0 and below will summon dragon instantly.
+  counter: 5
+boss:
+  # Number of path points for dragon to fly towards.
+  # These fly points are on a circle around the exit portal position with `points-distance` from it.
+  # Default value is 8.
+  fly-points: 8
+  # Distance between the exit portal position and fly point position.
+  # Larger distance means that dragon will need to fly longer till it reach it.
+  # Default value is 40.
+  point-distance: 40
+  # Minimal altitude for dragon to fly.
+  # Allows to change how low dragon can fly by Y axis.
+  # It is recommended to set it at the same height as island height.
+  min-altitude: 120
+  # Maximal altitude for dragon to fly.
+  # Allows to change how high dragon can fly by Y axis.
+  max-altitude: 150
+#
+# This list stores GameModes in which DragonFights addon should not work.
+# To disable addon it is necessary to write its name in new line that starts with -. Example:
+# disabled-gamemodes:
+#  - BSkyBlock
 disabled-gamemodes: []
-#- SkyGrid
-
-
