@@ -5,7 +5,14 @@ import org.bukkit.Bukkit;
 import java.util.Optional;
 
 
-import lv.id.bonne.dragonfights.configs.Settings;
+import io.github.iltotore.customentity.CustomRegistry;
+import lv.id.bonne.dragonfights.config.Settings;
+import lv.id.bonne.dragonfights.entity.BentoBoxEnderDragonRoot;
+import lv.id.bonne.dragonfights.entity.CustomEntityAPI;
+import lv.id.bonne.dragonfights.listeners.ActivationListener;
+import lv.id.bonne.dragonfights.listeners.DragonDamageListener;
+import lv.id.bonne.dragonfights.listeners.JoinLeaveListener;
+import lv.id.bonne.dragonfights.managers.DragonFightManager;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.hooks.VaultHook;
@@ -29,25 +36,12 @@ public class DragonFightsAddon extends Addon
 	@Override
 	public void onLoad()
 	{
+		// Registration must happen regardless of addon enabling status.
+		CustomRegistry registry = CustomEntityAPI.getAPI().getRegistry();
+		registry.register(new BentoBoxEnderDragonRoot());
+
 		super.onLoad();
-
-		// in most of addons, onLoad we want to store default configuration if it does not
-		// exist and load it.
-
-		// Storing default configuration is simple. But be aware, you need
-		// @StoreAt(filename="config.yml", path="addons/Example") in header of your Config file.
-		this.saveDefaultConfig();
-
-		this.settings = new Config<>(this, Settings.class).loadConfigObject();
-
-		if (this.settings == null)
-		{
-			// If we failed to load Settings then we should not enable addon.
-			// We can log error and set state to DISABLED.
-
-			this.logError("DragonFights settings could not load! Addon disabled.");
-			this.setState(State.DISABLED);
-		}
+		this.loadConfig();
 	}
 
 
@@ -73,47 +67,31 @@ public class DragonFightsAddon extends Addon
 
 		if (this.getState().equals(State.DISABLED))
 		{
-			Bukkit.getLogger().severe("DragonFights Addon is not available or disabled!");
+			Bukkit.getLogger().severe("DragonFightsAddon is not available or disabled!");
 			return;
 		}
+
+		this.addonManager = new DragonFightManager(this);
 
 		// If your addon wants to hook into other GameModes, f.e. use flags, then you should
 		// hook these flags into each GameMode.
 
 		// Fortunately BentoBox provides ability to a list of all loaded GameModes.
 
-		this.getPlugin().getAddonsManager().getGameModeAddons().forEach(gameModeAddon -> {
-			// In Settings (and config) we define DisabledGameModes, list of GameModes where
-			// current Addon should not work.
-			// This is where we do not hook current addon into GameMode addon.
-
-			if (!this.settings.getDisabledGameModes().contains(gameModeAddon.getDescription().getName()))
+		this.getPlugin().getAddonsManager().getGameModeAddons().stream().
+			filter(gameMode -> !this.settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
+			forEach(gameModeAddon ->
 			{
-				// Now we add GameModes to our Flags
-//				EXAMPLE_WORLD_FLAG.addGameModeAddon(gameModeAddon);
-//				EXAMPLE_SETTINGS_FLAG.addGameModeAddon(gameModeAddon);
-//				EXAMPLE_PERMISSION_FLAG.addGameModeAddon(gameModeAddon);
-
-				// Each GameMode could have Player Command and Admin Command and we could
-				// want to integrate our Example Command into these commands.
-				// It provides ability to call command with GameMode command f.e. "/island example"
-
-				// Of course we should check if these commands exists, as it is possible to
-				// create GameMode without them.
-
-//				gameModeAddon.getPlayerCommand().ifPresent(
-//					playerCommand -> new ExamplePlayerCommand(this, playerCommand));
-//
-//				gameModeAddon.getAdminCommand().ifPresent(
-//					adminCommand -> new ExampleAdminCommand(this, adminCommand));
-			}
-		});
-
-		// After we added all GameModes into flags, we need to register these flags into BentoBox.
+				// Only enable if end islands are enabled.
+				if (this.getPlugin().getIWM().isIslandEnd(gameModeAddon.getEndWorld()))
+				{
+					this.addonManager.addWorld(gameModeAddon.getOverWorld());
+					// add end world too for easier contains check.
+					this.addonManager.addWorld(gameModeAddon.getEndWorld());
+				}
+			});
 
 //		this.registerFlag(EXAMPLE_WORLD_FLAG);
-//		this.registerFlag(EXAMPLE_SETTINGS_FLAG);
-//		this.registerFlag(EXAMPLE_PERMISSION_FLAG);
 
 		// We can also search for certain addon where we want to integrate. I suggest to do it
 		// once and keep it as variable to avoid addon searching when we want to access its data.
@@ -122,11 +100,10 @@ public class DragonFightsAddon extends Addon
 
 		// We could also send a message to console to inform if level addon was not found.
 
-		if (!this.levelAddon.isPresent())
+		if (false && !this.levelAddon.isPresent())
 		{
 			this.logWarning("Level add-on not found by DragonFights Addon!");
 		}
-
 
 		// BentoBox does not manage money, but it provides VaultHook that does it.
 		// I suggest to do the same trick as with Level addon. Create local variable and
@@ -137,20 +114,15 @@ public class DragonFightsAddon extends Addon
 		// Even if Vault is installed, it does not mean that economy can be used. It is
 		// necessary to check it via VaultHook#hook() method.
 
-		if (!this.vaultHook.isPresent() || !this.vaultHook.get().hook())
+		if (false && !this.vaultHook.isPresent() || !this.vaultHook.get().hook())
 		{
 			this.logWarning("Economy plugin not found by DragonFights Addon!");
 		}
 
-
-		// Registering Listeners also is easy. You can do it from Addon class, without
-		// necessarily to register it into Bukkit.pluginManger.
-		// Registering it trough addon class also provides ability to relaod listener
-		// with BentoBox reload command.
-//		this.registerListener(new ExampleListener(this));
-
-		// Register Request Handlers
-		//this.registerRequestHandler(EXAMPLE_REQUEST_HANDLER);
+		// Registering addon listeners
+		this.registerListener(new DragonDamageListener(this));
+		this.registerListener(new ActivationListener(this));
+		this.registerListener(new JoinLeaveListener(this));
 	}
 
 
@@ -161,21 +133,7 @@ public class DragonFightsAddon extends Addon
 	public void onReload()
 	{
 		super.onReload();
-
-		// onReload most of addons just need to reload configuration.
-		// If flags, listeners and handlers were set up correctly via Addon.class then
-		// they will be reloaded automatically.
-
-		this.settings = new Config<>(this, Settings.class).loadConfigObject();
-
-		if (this.settings == null)
-		{
-			// If we failed to load Settings then we should not enable addon.
-			// We can log error and set state to DISABLED.
-
-			this.logError("DragonFights settings could not load! Addon disabled.");
-			this.setState(State.DISABLED);
-		}
+		this.loadConfig();
 	}
 
 
@@ -195,9 +153,52 @@ public class DragonFightsAddon extends Addon
 	}
 
 
+	/**
+	 * This method loads config.
+	 */
+	private void loadConfig()
+	{
+		// Save default config.yml
+		this.saveDefaultConfig();
+		// Load Addon Settings
+		this.settings = new Config<>(this, Settings.class).loadConfigObject();
+
+		if (this.settings == null)
+		{
+			// If we failed to load Settings then we should not enable addon.
+			// We can log error and set state to DISABLED.
+
+			this.logError("DragonFightsAddon settings could not load! Addon disabled.");
+			this.setState(State.DISABLED);
+		}
+	}
+
+
 	// ---------------------------------------------------------------------
 	// Section: Getters
 	// ---------------------------------------------------------------------
+
+
+	/**
+	 * Gets settings.
+	 *
+	 * @return the settings
+	 */
+	public Settings getSettings()
+	{
+		return settings;
+	}
+
+
+	/**
+	 * Gets manager.
+	 *
+	 * @return the manager
+	 */
+	public DragonFightManager getAddonManager()
+	{
+		return addonManager;
+	}
 
 
 	/**
@@ -230,6 +231,11 @@ public class DragonFightsAddon extends Addon
 	 * Settings object contains
 	 */
 	private Settings settings;
+
+	/**
+	 * Stores instance of addon manager.
+	 */
+	private DragonFightManager addonManager;
 
 	/**
 	 * Local variable that stores if level addon is present or not.

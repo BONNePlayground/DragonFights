@@ -25,13 +25,6 @@
 			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Spigot NMS. Used for Head Getter. -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<scope>provided</scope>
-		</dependency>
 		<!--   BentoBox dependencies.     -->
 		<dependency>
 			<groupId>world.bentobox</groupId>
@@ -80,6 +73,11 @@
 			<artifactId>dragonfights-v1_16_R3</artifactId>
 			<version>${revision}</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>18.0.0</version>
 		</dependency>
 	</dependencies>
 

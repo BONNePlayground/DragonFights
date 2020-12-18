@@ -1,0 +1,27 @@
+dragon-fights:
+  # Dragon Name in Boss Bar. Supports [owner] and [island] names.
+  dragon-name: "&l [owner]'s Dragon"
+  # Countdown in seconds till boss battle will start.
+  count-down-timer: "&l [number]"
+  # Informational messages for user.
+  messages:
+    # Message that appears before starting to generate portal.
+    starting-portal-generation: "&a Starting to generate exit portal."
+    # Message that appears when player tries to update portal center location.
+    portal-position-updated: "&a Portal center location updated."
+    # Message that appears before summoning ender dragon.
+    starting-countdown: "&a Starting to summon your dragon."
+    # Message about missing crystals.
+    missing-crystals: "&a You have placed [number] of 4 required crystals."
+  # Error messages for user.
+  errors:
+    # Error message that indicate user about failing portal position.
+    could-not-construct-portal: "&c Could not find a valid center position for portal. You can try to put a new Ender Crystal at the top of the middle block."
+    # Error about incorrect crystal placement.
+    wrong-positions: "&c One or more ender crystals are placed in wrong position. They should be in the middle of each side."
+    # Error about missing entity class in server.
+    missing-entity-definition: "&4 Missing entity definition class. Please contact with server admin."
+  # Conversations are chat input between server and user.
+  conversations:
+    # Prefix for messages that are send from server.
+    prefix: "&l&6 [BentoBox]: &r"
