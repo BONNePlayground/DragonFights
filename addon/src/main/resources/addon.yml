@@ -12,7 +12,7 @@ metrics: true
 repository: 'BONNePlayground/DragonFights'
 # Icon of addon that will be displayed in Addon Manager.
 # Must use Material.values() with uppercase.
-icon: 'WHITE_BANNER'
+icon: 'DRAGON_HEAD'
 
 # List of addon authors.
 authors:
