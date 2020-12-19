@@ -12,6 +12,7 @@ import lv.id.bonne.dragonfights.entity.BentoBoxEnderDragonRoot;
 import lv.id.bonne.dragonfights.entity.CustomEntityAPI;
 import lv.id.bonne.dragonfights.listeners.ActivationListener;
 import lv.id.bonne.dragonfights.listeners.DragonDamageListener;
+import lv.id.bonne.dragonfights.listeners.EndTeleportListener;
 import lv.id.bonne.dragonfights.listeners.JoinLeaveListener;
 import lv.id.bonne.dragonfights.managers.DragonFightManager;
 import world.bentobox.bentobox.api.addons.Addon;
@@ -199,6 +200,7 @@ public class DragonFightsAddon extends Addon
 		this.registerListener(new DragonDamageListener(this));
 		this.registerListener(new ActivationListener(this));
 		this.registerListener(new JoinLeaveListener(this));
+		this.registerListener(new EndTeleportListener(this));
 	}
 
 
