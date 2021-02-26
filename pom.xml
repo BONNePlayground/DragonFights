@@ -23,7 +23,7 @@
 		<spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
 		<bentobox.version>1.16.0-SNAPSHOT</bentobox.version>
 		<level.version>2.5.0</level.version>
-		<lib.version>1.0.0-SNAPSHOT</lib.version>
+		<lib.version>1.1.0-SNAPSHOT</lib.version>
 		<!-- Revision variable removes warning about dynamic version -->
 		<revision>${build.version}-SNAPSHOT</revision>
 		<!-- This allows to change between versions and snapshots. -->
