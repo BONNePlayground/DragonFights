@@ -39,8 +39,8 @@ To summon a new dragon players must place 4 end crystals on the middle block per
 ## Placeholders
 
 Addon currently have 2 placeholders:
-- `[gamemode]_dragonsfighs_killed_dragon_count` - returns number of killed dragons on user.
-- `[gamemode]_dragonsfighs_visited_killed_dragon_count` - returns number of killed dragons on visited island.
+- `[gamemode]_dragonsfights_killed_dragon_count` - returns number of killed dragons on user.
+- `[gamemode]_dragonsfights_visited_killed_dragon_count` - returns number of killed dragons on visited island.
 
 ## Compatibility
 
