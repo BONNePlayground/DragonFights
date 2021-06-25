@@ -99,112 +99,200 @@ public class Settings implements ConfigObject
 
 
 	/**
-	 * Gets warm up timer.
+	 * Is start on first join boolean.
 	 *
-	 * @return the warm up timer
+	 * @return the boolean
 	 */
-	public int getWarmUpTimer()
+	public boolean isStartOnFirstJoin()
 	{
-		return warmUpTimer;
+		return startOnFirstJoin;
 	}
 
 
 	/**
-	 * Sets warm up timer.
+	 * Sets start on first join.
 	 *
-	 * @param warmUpTimer the warm up timer
+	 * @param startOnFirstJoin the start on first join
 	 */
-	public void setWarmUpTimer(int warmUpTimer)
+	public void setStartOnFirstJoin(boolean startOnFirstJoin)
 	{
-		this.warmUpTimer = warmUpTimer;
+		this.startOnFirstJoin = startOnFirstJoin;
 	}
 
 
 	/**
-	 * Gets fly points.
+	 * Gets tower count.
 	 *
-	 * @return the fly points
+	 * @return the tower count
 	 */
-	public int getFlyPoints()
+	public int getTowerCount()
 	{
-		return flyPoints;
+		return towerCount;
 	}
 
 
 	/**
-	 * Sets point distance.
+	 * Sets tower count.
 	 *
-	 * @param pointDistance the point distance
+	 * @param towerCount the tower count
 	 */
-	public void setPointDistance(int pointDistance)
+	public void setTowerCount(int towerCount)
 	{
-		this.pointDistance = pointDistance;
+		this.towerCount = towerCount;
 	}
 
 
 	/**
-	 * Sets fly points.
+	 * Gets tower distance.
 	 *
-	 * @param flyPoints the fly points
+	 * @return the tower distance
 	 */
-	public void setFlyPoints(int flyPoints)
+	public int getTowerDistance()
 	{
-		this.flyPoints = flyPoints;
+		return towerDistance;
 	}
 
 
 	/**
-	 * Gets min altitude.
+	 * Sets tower distance.
 	 *
-	 * @return the min altitude
+	 * @param towerDistance the tower distance
 	 */
-	public int getMinAltitude()
+	public void setTowerDistance(int towerDistance)
 	{
-		return minAltitude;
+		this.towerDistance = towerDistance;
 	}
 
 
 	/**
-	 * Sets min altitude.
+	 * Gets min tower height.
 	 *
-	 * @param minAltitude the min altitude
+	 * @return the min tower height
 	 */
-	public void setMinAltitude(int minAltitude)
+	public int getMinTowerHeight()
 	{
-		this.minAltitude = minAltitude;
+		return minTowerHeight;
 	}
 
 
 	/**
-	 * Gets max altitude.
+	 * Sets min tower height.
 	 *
-	 * @return the max altitude
+	 * @param minTowerHeight the min tower height
 	 */
-	public int getMaxAltitude()
+	public void setMinTowerHeight(int minTowerHeight)
 	{
-		return maxAltitude;
+		this.minTowerHeight = minTowerHeight;
 	}
 
 
 	/**
-	 * Sets max altitude.
+	 * Gets max tower height.
 	 *
-	 * @param maxAltitude the max altitude
+	 * @return the max tower height
 	 */
-	public void setMaxAltitude(int maxAltitude)
+	public int getMaxTowerHeight()
 	{
-		this.maxAltitude = maxAltitude;
+		return maxTowerHeight;
 	}
 
 
 	/**
-	 * Gets point distance.
+	 * Sets max tower height.
 	 *
-	 * @return the point distance
+	 * @param maxTowerHeight the max tower height
 	 */
-	public int getPointDistance()
+	public void setMaxTowerHeight(int maxTowerHeight)
 	{
-		return pointDistance;
+		this.maxTowerHeight = maxTowerHeight;
+	}
+
+
+	/**
+	 * Gets number of protected towers.
+	 *
+	 * @return the number of protected towers
+	 */
+	public int getNumberOfProtectedTowers()
+	{
+		return numberOfProtectedTowers;
+	}
+
+
+	/**
+	 * Sets number of protected towers.
+	 *
+	 * @param numberOfProtectedTowers the number of protected towers
+	 */
+	public void setNumberOfProtectedTowers(int numberOfProtectedTowers)
+	{
+		this.numberOfProtectedTowers = numberOfProtectedTowers;
+	}
+
+
+	/**
+	 * Is play music boolean.
+	 *
+	 * @return the boolean
+	 */
+	public boolean isPlayMusic()
+	{
+		return playMusic;
+	}
+
+
+	/**
+	 * Sets play music.
+	 *
+	 * @param playMusic the play music
+	 */
+	public void setPlayMusic(boolean playMusic)
+	{
+		this.playMusic = playMusic;
+	}
+
+
+	/**
+	 * Is enable fog boolean.
+	 *
+	 * @return the boolean
+	 */
+	public boolean isEnableFog()
+	{
+		return enableFog;
+	}
+
+
+	/**
+	 * Sets enable fog.
+	 *
+	 * @param enableFog the enable fog
+	 */
+	public void setEnableFog(boolean enableFog)
+	{
+		this.enableFog = enableFog;
+	}
+
+
+	/**
+	 * Gets battle seed.
+	 *
+	 * @return the battle seed
+	 */
+	public long getBattleSeed()
+	{
+		return battleSeed;
+	}
+
+
+	/**
+	 * Sets battle seed.
+	 *
+	 * @param battleSeed the battle seed
+	 */
+	public void setBattleSeed(long battleSeed)
+	{
+		this.battleSeed = battleSeed;
 	}
 
 
@@ -224,35 +312,50 @@ public class Settings implements ConfigObject
 	@ConfigEntry(path = "boss-bar.style")
 	private BarStyle bossBarStyle = BarStyle.SOLID;
 
-	@ConfigComment("Setting a number of seconds before dragon will be summoned.")
-	@ConfigComment("0 and below will summon dragon instantly.")
-	@ConfigEntry(path = "boss-bar.counter")
-	private int warmUpTimer = 5;
+	@ConfigComment("This option allows to enable dragon fight when player joins the end first time.")
+	@ConfigComment("On first join it will start dragon summoning sequence.")
+	@ConfigEntry(path = "battle.start-on-join")
+	private boolean startOnFirstJoin;
 
-	@ConfigComment("Number of path points for dragon to fly towards.")
-	@ConfigComment("These fly points are on a circle around the exit portal position with `points-distance` from it.")
-	@ConfigComment("Default value is 8.")
-	@ConfigEntry(path = "boss.fly-points")
-	private int flyPoints = 8;
+	@ConfigComment("Number of towers generated for the battle.")
+	@ConfigComment("Default value is 12.")
+	@ConfigEntry(path = "battle.tower-count")
+	private int towerCount = 12;
 
-	@ConfigComment("Distance between the exit portal position and fly point position.")
-	@ConfigComment("Larger distance means that dragon will need to fly longer till it reach it.")
+	@ConfigComment("Distance from portal till the towers.")
 	@ConfigComment("Default value is 40.")
-	@ConfigEntry(path = "boss.point-distance")
-	private int pointDistance = 40;
+	@ConfigEntry(path = "battle.tower-distance")
+	private int towerDistance = 40;
 
+	@ConfigComment("Minimal height for the tower.")
+	@ConfigComment("Default value is 120.")
+	@ConfigEntry(path = "battle.tower-min-height")
+	private int minTowerHeight = 120;
 
-	@ConfigComment("Minimal altitude for dragon to fly.")
-	@ConfigComment("Allows to change how low dragon can fly by Y axis.")
-	@ConfigComment("It is recommended to set it at the same height as island height.")
-	@ConfigEntry(path = "boss.min-altitude")
-	private int minAltitude = 120;
+	@ConfigComment("Maximal height for the tower.")
+	@ConfigComment("Default value is 150.")
+	@ConfigEntry(path = "battle.tower-max-height")
+	private int maxTowerHeight = 150;
 
-	@ConfigComment("Maximal altitude for dragon to fly.")
-	@ConfigComment("Allows to change how high dragon can fly by Y axis.")
-	@ConfigEntry(path = "boss.max-altitude")
-	private int maxAltitude = 150;
+	@ConfigComment("Number of protected towers.")
+	@ConfigComment("Default value is 2.")
+	@ConfigEntry(path = "battle.protected-towers")
+	private int numberOfProtectedTowers = 2;
 
+	@ConfigComment("Play the battle music.")
+	@ConfigComment("Default value is true.")
+	@ConfigEntry(path = "battle.play-music")
+	private boolean playMusic = true;
+
+	@ConfigComment("Set the battle fog.")
+	@ConfigComment("Default value is false.")
+	@ConfigEntry(path = "battle.enable-fog")
+	private boolean enableFog;
+
+	@ConfigComment("Battle Seed is a semi-random number that generates towers in the end.")
+	@ConfigComment("This allows to give equal arena for each player.")
+	@ConfigEntry(path = "battle.battle-seed")
+	private long battleSeed = 0;
 
 	@ConfigComment("")
 	@ConfigComment("This list stores GameModes in which DragonFights addon should not work.")
