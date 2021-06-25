@@ -11,6 +11,7 @@ import com.google.gson.annotations.Expose;
 
 import org.bukkit.World;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import world.bentobox.bentobox.database.objects.DataObject;
@@ -85,7 +86,7 @@ public class DragonFightsObject implements DataObject
 	 *
 	 * @return the portal location
 	 */
-	public Vector getPortalLocation()
+	public @Nullable Vector getPortalLocation()
 	{
 		return portalLocation;
 	}
@@ -96,7 +97,7 @@ public class DragonFightsObject implements DataObject
 	 *
 	 * @param portalLocation the portal location
 	 */
-	public void setPortalLocation(Vector portalLocation)
+	public void setPortalLocation(@NotNull Vector portalLocation)
 	{
 		this.portalLocation = portalLocation;
 	}
@@ -107,7 +108,7 @@ public class DragonFightsObject implements DataObject
 	 *
 	 * @return the latest battle data
 	 */
-	public String getLatestBattleData()
+	public @Nullable String getLatestBattleData()
 	{
 		return latestBattleData;
 	}
@@ -118,7 +119,7 @@ public class DragonFightsObject implements DataObject
 	 *
 	 * @param latestBattleData the latest battle data
 	 */
-	public void setLatestBattleData(String latestBattleData)
+	public void setLatestBattleData(@Nullable String latestBattleData)
 	{
 		this.latestBattleData = latestBattleData;
 	}

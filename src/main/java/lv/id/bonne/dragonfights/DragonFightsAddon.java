@@ -11,8 +11,6 @@ import lv.id.bonne.dragonfights.config.Settings;
 import lv.id.bonne.dragonfights.entity.BentoBoxEnderDragonRoot;
 import lv.id.bonne.dragonfights.entity.CustomEntityAPI;
 import lv.id.bonne.dragonfights.listeners.ActivationListener;
-import lv.id.bonne.dragonfights.listeners.DragonDamageListener;
-import lv.id.bonne.dragonfights.listeners.EndTeleportListener;
 import lv.id.bonne.dragonfights.listeners.JoinLeaveListener;
 import lv.id.bonne.dragonfights.managers.DragonFightManager;
 import world.bentobox.bentobox.api.addons.Addon;
@@ -89,6 +87,9 @@ public class DragonFightsAddon extends Addon
 		if (this.hooked)
 		{
 			this.setupAddon();
+
+			// Load data about existing battles.
+			this.addonManager.load();
 		}
 		else
 		{
@@ -177,7 +178,7 @@ public class DragonFightsAddon extends Addon
 
 		// We could also send a message to console to inform if level addon was not found.
 
-		if (false && !this.levelAddon.isPresent())
+		if (!this.levelAddon.isPresent())
 		{
 			this.logWarning("Level add-on not found by DragonFights Addon!");
 		}
@@ -191,16 +192,14 @@ public class DragonFightsAddon extends Addon
 		// Even if Vault is installed, it does not mean that economy can be used. It is
 		// necessary to check it via VaultHook#hook() method.
 
-		if (false && !this.vaultHook.isPresent() || !this.vaultHook.get().hook())
+		if (!this.vaultHook.isPresent())
 		{
-			this.logWarning("Economy plugin not found by DragonFights Addon!");
+			this.logWarning("Vault plugin not found by DragonFights Addon!");
 		}
 
 		// Registering addon listeners
-		this.registerListener(new DragonDamageListener(this));
 		this.registerListener(new ActivationListener(this));
 		this.registerListener(new JoinLeaveListener(this));
-		this.registerListener(new EndTeleportListener(this));
 	}
 
 
@@ -221,8 +220,12 @@ public class DragonFightsAddon extends Addon
 	@Override
 	public void onDisable()
 	{
-		// onDisable we would like to save exisitng settings. It is not necessary for
+		// onDisable we would like to save existing settings. It is not necessary for
 		// addons that does not have interface for settings editing!
+		if (this.addonManager != null)
+		{
+			this.addonManager.save();
+		}
 
 		if (this.settings != null)
 		{

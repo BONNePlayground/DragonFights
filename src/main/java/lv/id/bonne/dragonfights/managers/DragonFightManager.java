@@ -7,15 +7,19 @@
 package lv.id.bonne.dragonfights.managers;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
+import lv.id.bonne.custombattle.CustomDragonBattle;
+import lv.id.bonne.custombattle.DragonBattleBuilder;
 import lv.id.bonne.dragonfights.DragonFightsAddon;
 import lv.id.bonne.dragonfights.database.objects.DragonFightsObject;
-import lv.id.bonne.dragonfights.tasks.PortalGenerator;
+import lv.id.bonne.dragonfights.entity.CustomEntityAPI;
 import lv.id.bonne.dragonfights.utils.Constants;
+import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
@@ -38,7 +42,7 @@ public class DragonFightManager
 		this.dragonFightsDatabase = new Database<>(addon, DragonFightsObject.class);
 		this.dragonFightsCache = new HashMap<>();
 
-		this.portalGeneratorCache = new HashMap<>();
+		this.generatedBattles = new HashMap<>();
 	}
 
 
@@ -70,6 +74,63 @@ public class DragonFightManager
 // ---------------------------------------------------------------------
 // Section: Data related methods
 // ---------------------------------------------------------------------
+
+
+	/**
+	 * This method saves every active battle.
+	 */
+	public void save()
+	{
+		this.generatedBattles.forEach((s, battle) -> {
+			DragonFightsObject data = this.getIslandData(s);
+
+			if (data != null)
+			{
+				Optional<Island> islandById = this.addon.getIslands().getIslandById(data.getUniqueId());
+				World world = islandById.get().getWorld();
+
+				data.setLatestBattleData(battle.saveData());
+				data.setPortalLocation(battle.getGeneratedPortalLocation());
+				data.setWorld(this.addon.getPlugin().getIWM().getEndWorld(world));
+			}
+		});
+
+		// Save all dragons fights objects from cache to the database.
+		this.dragonFightsCache.forEach((id, dragonFightsObject) ->
+			this.dragonFightsDatabase.saveObjectAsync(dragonFightsObject));
+	}
+
+
+	/**
+	 * This method loads everything from the database into local cache.
+	 */
+	public void load()
+	{
+		this.dragonFightsDatabase.loadObjects().forEach(dragonFightsObject -> {
+			// Load into cache.
+			this.dragonFightsCache.put(dragonFightsObject.getUniqueId(), dragonFightsObject);
+
+			// If there was an active battle, put it into start list.
+			if (dragonFightsObject.getLatestBattleData() != null &&
+				!dragonFightsObject.getLatestBattleData().isEmpty())
+			{
+				DragonBattleBuilder builder =
+					CustomEntityAPI.getAPI().createDragonBattleBuilder(dragonFightsObject.getUniqueId());
+				builder.setWorld(dragonFightsObject.getWorld());
+
+				CustomDragonBattle customDragonBattle =
+					builder.buildFromNBT(dragonFightsObject.getLatestBattleData());
+
+				this.generatedBattles.put(dragonFightsObject.getUniqueId(), customDragonBattle);
+
+				if (customDragonBattle != null)
+				{
+					// Start the battle with 60 sec delay.
+					this.startBattleTask(dragonFightsObject, customDragonBattle, 20 * 60);
+				}
+			}
+		});
+	}
 
 
 	/**
@@ -205,37 +266,19 @@ public class DragonFightManager
 
 
 // ---------------------------------------------------------------------
-// Section: Portal Generator related methods
+// Section: Dragon Battle Generation
 // ---------------------------------------------------------------------
 
 
 	/**
-	 * Gets portal generator.
-	 *
-	 * @param uniqueId the unique id
-	 * @return the portal generator
+	 * This method returns Optional with generated dragon battle with given UniqueId.
+	 * @param uniqueId Battle which must be returned.
+	 * @return Optional with custom dragon battle.
 	 */
-	public @Nullable PortalGenerator getPortalGenerator(String uniqueId)
+	public Optional<CustomDragonBattle> getDragonBattle(String uniqueId)
 	{
-		return this.portalGeneratorCache.get(uniqueId);
+		return Optional.ofNullable(this.generatedBattles.get(uniqueId));
 	}
-
-
-	/**
-	 * Add portal cache.
-	 *
-	 * @param uniqueId the unique id
-	 * @param portalGenerator the portal generator
-	 */
-	public void addPortalCache(String uniqueId, PortalGenerator portalGenerator)
-	{
-		this.portalGeneratorCache.put(uniqueId, portalGenerator);
-	}
-
-
-// ---------------------------------------------------------------------
-// Section: Dragon Name
-// ---------------------------------------------------------------------
 
 
 	/**
@@ -257,6 +300,99 @@ public class DragonFightManager
 				Constants.PARAMETER_ISLAND, island.getName() == null ? "" : island.getName(),
 				Constants.PARAMETER_OWNER, owner.getName());
 		}
+	}
+
+
+	/**
+	 * This method creates a new dragon battle instance using CustomEntityAPI.
+	 * @param world World where battle can be generated.
+	 * @param island Island on which battle is starting.
+	 * @return Instance of CustomDragonBattle that is started.
+	 */
+	public CustomDragonBattle createDragonBattle(World world, Island island)
+	{
+		DragonFightsObject dragonFightsObject = this.getIslandData(island);
+
+		DragonBattleBuilder dragonBattleBuilder = CustomEntityAPI.getAPI().createDragonBattleBuilder(island.getUniqueId());
+		dragonBattleBuilder.setDragonKilled(true);
+		dragonBattleBuilder.setPreviouslyKilled(dragonFightsObject.getDragonsKilled() > 0);
+		dragonBattleBuilder.setWorld(world);
+
+		if (dragonFightsObject.getPortalLocation() != null)
+		{
+			dragonBattleBuilder.setPortalLocation(dragonFightsObject.getPortalLocation());
+		}
+		else
+		{
+			dragonBattleBuilder.setPortalLocation(island.getCenter().toVector());
+		}
+
+		dragonBattleBuilder.setBoundingBox(island.getBoundingBox());
+		dragonBattleBuilder.setRange(island.getRange());
+
+		dragonBattleBuilder.setBattleSeed(this.addon.getSettings().getBattleSeed());
+		dragonBattleBuilder.setNumberOfTowers(this.addon.getSettings().getTowerCount());
+		dragonBattleBuilder.setNumberOfProtectedTowers(this.addon.getSettings().getNumberOfProtectedTowers());
+		dragonBattleBuilder.setMaxTowerHeight(this.addon.getSettings().getMaxTowerHeight());
+		dragonBattleBuilder.setMinTowerHeight(this.addon.getSettings().getMinTowerHeight());
+		dragonBattleBuilder.setDistanceTillTowers(this.addon.getSettings().getTowerDistance());
+
+		dragonBattleBuilder.setPlayMusic(this.addon.getSettings().isPlayMusic());
+		dragonBattleBuilder.setEnableFog(this.addon.getSettings().isEnableFog());
+
+		dragonBattleBuilder.setBossBarStyle(this.addon.getSettings().getBossBarStyle());
+		dragonBattleBuilder.setBossBarColor(this.addon.getSettings().getBossBarColour());
+		dragonBattleBuilder.setBossBarText(this.generateDragonName(island));
+
+		CustomDragonBattle battle = dragonBattleBuilder.build();
+
+		// start the battle
+
+		if (battle != null)
+		{
+			this.generatedBattles.put(island.getUniqueId(), battle);
+			this.startBattleTask(dragonFightsObject, battle, 0);
+		}
+
+		return battle;
+	}
+
+
+	/**
+	 * This is a battle task timer. It should be called just once for each battle.
+	 * TODO: probably need to implement max active battles at once.
+	 * @param databaseObject The database object.
+	 * @param battle Battle that must be started.
+	 * @param delay The delay after which task will start to run.
+	 */
+	public void startBattleTask(DragonFightsObject databaseObject, CustomDragonBattle battle, long delay)
+	{
+		Bukkit.getScheduler().runTaskTimer(BentoBox.getInstance(),
+			task -> {
+				battle.tickBattle();
+
+				if (battle.isFinished())
+				{
+					this.finishTheBattle(databaseObject, battle);
+					task.cancel();
+				}
+			},
+			delay,
+			1);
+	}
+
+
+	/**
+	 * This method process battle finishing data.
+	 * @param databaseObject The database object.
+	 * @param battle that must be finished.
+	 */
+	public void finishTheBattle(DragonFightsObject databaseObject, CustomDragonBattle battle)
+	{
+		// Reset data to the null value.
+		databaseObject.setLatestBattleData("");
+		databaseObject.setDragonsKilled(databaseObject.getDragonsKilled() + 1);
+		databaseObject.setPortalLocation(battle.getGeneratedPortalLocation());
 	}
 
 
@@ -288,5 +424,5 @@ public class DragonFightManager
 	/**
 	 * Stores portal generator cache.
 	 */
-	private final Map<String, PortalGenerator> portalGeneratorCache;
+	private final Map<String, CustomDragonBattle> generatedBattles;
 }

@@ -314,6 +314,8 @@ public class Settings implements ConfigObject
 
 	@ConfigComment("This option allows to enable dragon fight when player joins the end first time.")
 	@ConfigComment("On first join it will start dragon summoning sequence.")
+	@ConfigComment("Note, this will void blocks to generate exit portal. You should adjust blueprint so there are enough")
+	@ConfigComment("space around the bedrock block for it to spawn.")
 	@ConfigEntry(path = "battle.start-on-join")
 	private boolean startOnFirstJoin;
 
