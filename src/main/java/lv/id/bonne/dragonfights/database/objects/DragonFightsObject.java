@@ -9,10 +9,9 @@ package lv.id.bonne.dragonfights.database.objects;
 
 import com.google.gson.annotations.Expose;
 
+import org.bukkit.World;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 import world.bentobox.bentobox.database.objects.DataObject;
 import world.bentobox.bentobox.database.objects.Table;
@@ -60,68 +59,68 @@ public class DragonFightsObject implements DataObject
 
 
 	/**
-	 * Is active fight boolean.
+	 * Gets world.
 	 *
-	 * @return the boolean
+	 * @return the world
 	 */
-	public boolean isActiveFight()
+	public World getWorld()
 	{
-		return activeFight;
+		return world;
 	}
 
 
 	/**
-	 * Sets active fight.
+	 * Sets world.
 	 *
-	 * @param activeFight the active fight
+	 * @param world the world
 	 */
-	public void setActiveFight(boolean activeFight)
+	public void setWorld(World world)
 	{
-		this.activeFight = activeFight;
+		this.world = world;
 	}
 
 
 	/**
-	 * Gets latest spawn location.
+	 * Gets portal location.
 	 *
-	 * @return the latest spawn location
+	 * @return the portal location
 	 */
-	public @Nullable Vector getLatestSpawnLocation()
+	public Vector getPortalLocation()
 	{
-		return latestSpawnLocation;
+		return portalLocation;
 	}
 
 
 	/**
-	 * Sets latest spawn location.
+	 * Sets portal location.
 	 *
-	 * @param latestSpawnLocation the latest spawn location
+	 * @param portalLocation the portal location
 	 */
-	public void setLatestSpawnLocation(@Nullable Vector latestSpawnLocation)
+	public void setPortalLocation(Vector portalLocation)
 	{
-		this.latestSpawnLocation = latestSpawnLocation;
+		this.portalLocation = portalLocation;
 	}
 
 
 	/**
-	 * Gets latest portal location.
+	 * Gets latest battle data.
 	 *
-	 * @return the latest portal location
+	 * @return the latest battle data
 	 */
-	public @Nullable Vector getLatestPortalLocation()
+	public String getLatestBattleData()
 	{
-		return latestPortalLocation;
+		return latestBattleData;
 	}
 
 
 	/**
-	 * Sets latest portal location.
+	 * Sets latest battle data.
 	 *
-	 * @param latestPortalLocation the latest portal location
+	 * @param latestBattleData the latest battle data
 	 */
-	public void setLatestPortalLocation(@Nullable Vector latestPortalLocation)
+	public void setLatestBattleData(String latestBattleData)
 	{
-		this.latestPortalLocation = latestPortalLocation;
+		this.latestBattleData = latestBattleData;
 	}
 
 
@@ -147,37 +146,6 @@ public class DragonFightsObject implements DataObject
 	}
 
 
-	/**
-	 * Gets boss bar id.
-	 *
-	 * @return the boss bar id
-	 */
-	public @Nullable UUID getDragonUUID()
-	{
-		return dragonUUID;
-	}
-
-
-	/**
-	 * Sets boss bar id.
-	 *
-	 * @param dragonUUID the boss bar id
-	 */
-	public void setDragonUUID(@Nullable UUID dragonUUID)
-	{
-		this.dragonUUID = dragonUUID;
-	}
-
-
-	/**
-	 * Increase number of killed dragons.
-	 */
-	public void increaseKilledDragons()
-	{
-		this.dragonsKilled++;
-	}
-
-
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -190,28 +158,22 @@ public class DragonFightsObject implements DataObject
 	private String uniqueId;
 
 	/**
-	 * Boolean that indicates that there are a dragon on the island.
+	 * World data where fight is happening.
 	 */
 	@Expose
-	private boolean activeFight = false;
+	private World world;
 
 	/**
-	 * UUID of the latest dragon entity.
+	 * Portal location.
 	 */
 	@Expose
-	private @Nullable UUID dragonUUID = null;
+	private @Nullable Vector portalLocation;
 
 	/**
-	 * Spawn location of the dragon
+	 * Latest battle data.
 	 */
 	@Expose
-	private @Nullable Vector latestSpawnLocation;
-
-	/**
-	 * Portal location of the dragon.
-	 */
-	@Expose
-	private @Nullable Vector latestPortalLocation;
+	private @Nullable String latestBattleData;
 
 	/**
 	 * Number of dragons killed on the island.
