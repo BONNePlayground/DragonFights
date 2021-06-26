@@ -280,7 +280,7 @@
 							<repositoryLayout>default</repositoryLayout>
 							<groupId>io.github.iltotore</groupId>
 							<artifactId>customentity</artifactId>
-							<version>1.0.3</version>
+							<version>${lib.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
 						</configuration>
