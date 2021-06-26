@@ -125,6 +125,11 @@
 			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>plugin-annotations</artifactId>
+			<version>1.2.3-SNAPSHOT</version>
+		</dependency>
 		<!--   BentoBox dependencies.     -->
 		<dependency>
 			<groupId>world.bentobox</groupId>
