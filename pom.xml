@@ -17,11 +17,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>16</java.version>
 		<powermock.version>1.7.4</powermock.version>
 		<!-- More visible way how to change dependency versions -->
-		<spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
-		<bentobox.version>1.16.0-SNAPSHOT</bentobox.version>
+		<spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+		<bentobox.version>1.17.0-SNAPSHOT</bentobox.version>
 		<level.version>2.5.0</level.version>
 		<lib.version>1.1.0-SNAPSHOT</lib.version>
 		<!-- Revision variable removes warning about dynamic version -->
@@ -167,6 +167,12 @@
 		<dependency>
 			<groupId>lv.id.bonne</groupId>
 			<artifactId>dragonfights-v1_16_R3</artifactId>
+			<version>${lib.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_17_R1</artifactId>
 			<version>${lib.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -333,6 +339,22 @@
 							<repositoryLayout>default</repositoryLayout>
 							<groupId>lv.id.bonne</groupId>
 							<artifactId>dragonfights-v1_16_R3</artifactId>
+							<version>${lib.version}</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>install-v117R1</id>
+						<phase>clean</phase>
+						<configuration>
+							<file>${basedir}/lib/dragonfights-v1_17_R1.jar</file>
+							<repositoryLayout>default</repositoryLayout>
+							<groupId>lv.id.bonne</groupId>
+							<artifactId>dragonfights-v1_17_R1</artifactId>
 							<version>${lib.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>

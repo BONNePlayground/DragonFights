@@ -93,6 +93,7 @@ public class BentoBoxEnderDragonRoot extends CompositeEntityRoot<EnderDragon>
 		this.setVersion(ServerVersion.v1_16_1, lv.id.bonne.dragonfights.v1_16_R1.entity.BentoBoxEnderDragonType::new);
 		this.setVersion(ServerVersion.v1_16_2, lv.id.bonne.dragonfights.v1_16_R2.entity.BentoBoxEnderDragonType::new);
 		this.setVersion(ServerVersion.v1_16_3, lv.id.bonne.dragonfights.v1_16_R3.entity.BentoBoxEnderDragonType::new);
+		this.setVersion(ServerVersion.v1_17, lv.id.bonne.dragonfights.v1_17_R1.entity.BentoBoxEnderDragonType::new);
 	}
 }
 

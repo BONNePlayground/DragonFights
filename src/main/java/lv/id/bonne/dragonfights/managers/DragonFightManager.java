@@ -125,8 +125,8 @@ public class DragonFightManager
 
 				if (customDragonBattle != null)
 				{
-					// Start the battle with 60 sec delay.
-					this.startBattleTask(dragonFightsObject, customDragonBattle, 20 * 60);
+					// Start the battle with 30 sec delay.
+					this.startBattleTask(dragonFightsObject, customDragonBattle, 20 * 30);
 				}
 			}
 		});
