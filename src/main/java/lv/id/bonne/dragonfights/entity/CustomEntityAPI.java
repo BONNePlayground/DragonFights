@@ -53,10 +53,6 @@ public class CustomEntityAPI
 	 */
 	static
 	{
-		versions.put(ServerVersion.v1_15, lv.id.bonne.dragonfights.v1_15_R1.NMSHandler::new);
-		versions.put(ServerVersion.v1_16_1, lv.id.bonne.dragonfights.v1_16_R1.NMSHandler::new);
-		versions.put(ServerVersion.v1_16_2, lv.id.bonne.dragonfights.v1_16_R2.NMSHandler::new);
-		versions.put(ServerVersion.v1_16_3, lv.id.bonne.dragonfights.v1_16_R3.NMSHandler::new);
 		versions.put(ServerVersion.v1_17, lv.id.bonne.dragonfights.v1_17_R1.NMSHandler::new);
 	}
 }
