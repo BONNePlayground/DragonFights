@@ -21,7 +21,7 @@
 		<powermock.version>1.7.4</powermock.version>
 		<!-- More visible way how to change dependency versions -->
 		<spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
-		<bentobox.version>1.16.0-SNAPSHOT</bentobox.version>
+		<bentobox.version>1.16.2</bentobox.version>
 		<level.version>2.5.0</level.version>
 		<lib.version>1.1.0-SNAPSHOT</lib.version>
 		<!-- Revision variable removes warning about dynamic version -->
@@ -68,6 +68,15 @@
 				<!-- Empties build.number value -->
 				<build.number></build.number>
 			</properties>
+			<repositories>
+				<repository>
+					<id>github</id>
+					<url>https://maven.pkg.github.com/BONNePlayground/DragonFights</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
 		</profile>
 	</profiles>
 
@@ -269,7 +278,7 @@
 							<repositoryLayout>default</repositoryLayout>
 							<groupId>io.github.iltotore</groupId>
 							<artifactId>customentity</artifactId>
-							<version>1.0.3</version>
+							<version>${lib.version}</version>
 							<packaging>jar</packaging>
 							<generatePom>true</generatePom>
 						</configuration>
@@ -381,6 +390,13 @@
 				<version>3.2.1</version>
 				<configuration>
 					<minimizeJar>true</minimizeJar>
+					<artifactSet>
+						<includes>
+							<include>io.github.iltotore:customentity:*</include>
+							<include>lv.id.bonne:*:*</include>
+							<include>org.spigotmc:plugin-annotations:*</include>
+						</includes>
+					</artifactSet>
 				</configuration>
 				<executions>
 					<execution>
