@@ -40,6 +40,12 @@ To summon a new dragon players must place 4 end crystals on the middle block per
 
    Yes, that is how it should work. If they destroy end crystals before dragon is summoned, battle is stopped.
 
+5. **How can I get this addon?**
+
+   The official releases can be found here: [Releases](https://github.com/BONNePlayground/DragonFights/releases)
+   
+   Development versions can be found here: [Releases](https://ci.codemc.io/job/BONNePlayground/job/DragonFights/)
+
 ## Placeholders
 
 Addon currently have 2 placeholders:
