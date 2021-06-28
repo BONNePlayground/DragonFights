@@ -6,9 +6,10 @@ This is DragonFights Addon for BentoBox plugin.
 
 ## How to install
 
-1. Place the addon jar in the addons folder of the BentoBox plugin
-2. Restart the server
-3. In game you can change flags that allows to use current addon.
+1. Place the addon jar in the addons folder of the BentoBox plugin.
+2. Restart the server.
+3. Change DragonFights/config.yml to suit your needs.
+4. Restart the server again.
 
 ## Configuration
 
@@ -19,22 +20,25 @@ The latest configuration file with comments can be found [here](https://github.c
 This addon works only in GameModes with enabled end islands.
 It is not required to have an exit portal in the end blueprint, as users can generate it by placing End Crystal on the bedrock block. It will automatically generate a new exit portal.
 
-To summon a new dragon players must place 4 end crystals on the middle block per each side.
+To summon a new dragon players must place 4 end crystals on the middle block per each end trophy side. It will start the end dragon summoning sequence.
 
 ## FAQ
 
-1. **I have created exit portal but nothing happens.**
+1. **I have created end trophy but nothing happens.**
 
-    Yes, sometimes there are some issues with detecting a correct portal or spawning an ender dragon. It should be enough if you place a new End Crystal on the middle bedrock block.
+    Hmm, it could be a bug in my system. Maybe you could fill the bug report?
 
 2. **My dragon was removed when I teleported to the end.**
 
     This can happen if dragon was close to spawn position, and it is not added to "remove-mobs-whitelist" in gamemode config. It should be enough if you add ENDER_DRAGON to the whitelist.
 
-3. **There are no obsidian towers around the portal.**
+3. **There are no obsidian towers around the trophy.**
 
-    Yes, it is not an easy task to generate obsidian towers without ruining other blocks in that positions and avoiding to generating them from the bottom. 
-    Maybe will implement in the future, if enough people will request it.
+    Obsidian towers will be generated after player initialize dragon fight. 
+   
+4. **Players can stop the dragon fight if they destroy end crystals.**
+
+   Yes, that is how it should work. If they destroy end crystals before dragon is summoned, battle is stopped.
 
 ## Placeholders
 
@@ -44,4 +48,7 @@ Addon currently have 2 placeholders:
 
 ## Compatibility
 
-- [x] BentoBox 1.15.0
+- [x] BentoBox 1.17
+- [x] Spigot 1.17
+
+Addon is not compatible with Older BentoBox and Spigot version. It requires Java 16+.
