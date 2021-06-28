@@ -1,4 +1,4 @@
-# DragonFights Configuration 1.0.0
+# DragonFights Configuration 1.1.0
 # This config file is dynamic and saved when the server is shutdown.
 #
 boss-bar:
@@ -9,25 +9,36 @@ boss-bar:
   # Allows to change default style for the boss bar.
   # Supports values from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html
   style: SOLID
-  # Setting a number of seconds before dragon will be summoned.
-  # 0 and below will summon dragon instantly.
-  counter: 5
-boss:
-  # Number of path points for dragon to fly towards.
-  # These fly points are on a circle around the exit portal position with `points-distance` from it.
-  # Default value is 8.
-  fly-points: 8
-  # Distance between the exit portal position and fly point position.
-  # Larger distance means that dragon will need to fly longer till it reach it.
+battle:
+  # This option allows to enable dragon fight when player joins the end first time.
+  # On first join it will start dragon summoning sequence.
+  # Note, this will void blocks to generate exit portal. You should adjust blueprint so there are enough
+  # space around the bedrock block for it to spawn.
+  start-on-join: false
+  # Number of towers generated for the battle.
+  # Default value is 12.
+  tower-count: 12
+  # Distance from portal till the towers.
   # Default value is 40.
-  point-distance: 40
-  # Minimal altitude for dragon to fly.
-  # Allows to change how low dragon can fly by Y axis.
-  # It is recommended to set it at the same height as island height.
-  min-altitude: 120
-  # Maximal altitude for dragon to fly.
-  # Allows to change how high dragon can fly by Y axis.
-  max-altitude: 150
+  tower-distance: 40
+  # Minimal height for the tower.
+  # Default value is 120.
+  tower-min-height: 120
+  # Maximal height for the tower.
+  # Default value is 150.
+  tower-max-height: 150
+  # Number of protected towers.
+  # Default value is 2.
+  protected-towers: 2
+  # Play the battle music.
+  # Default value is true.
+  play-music: true
+  # Set the battle fog.
+  # Default value is false.
+  enable-fog: false
+  # Battle Seed is a semi-random number that generates towers in the end.
+  # This allows to give equal arena for each player.
+  battle-seed: 0
 #
 # This list stores GameModes in which DragonFights addon should not work.
 # To disable addon it is necessary to write its name in new line that starts with -. Example:
