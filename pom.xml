@@ -20,10 +20,9 @@
 		<java.version>16</java.version>
 		<powermock.version>1.7.4</powermock.version>
 		<!-- More visible way how to change dependency versions -->
-		<spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+		<spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
 		<bentobox.version>1.17.0</bentobox.version>
 		<level.version>2.5.0</level.version>
-		<lib.version>1.1.0</lib.version>
 		<!-- Revision variable removes warning about dynamic version -->
 		<revision>${build.version}-SNAPSHOT</revision>
 		<!-- This allows to change between versions and snapshots. -->
@@ -144,6 +143,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
 			<artifactId>plugin-annotations</artifactId>
 			<version>1.2.3-SNAPSHOT</version>
 		</dependency>
@@ -165,13 +170,13 @@
 		<dependency>
 			<groupId>io.github.iltotore</groupId>
 			<artifactId>customentity</artifactId>
-			<version>${lib.version}</version>
+			<version>1.1.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>lv.id.bonne</groupId>
 			<artifactId>dragonfights-v1_17_r1</artifactId>
-			<version>${lib.version}</version>
+			<version>1.1.1</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
