@@ -87,15 +87,23 @@ public class DragonFightsAddon extends Addon
 		if (this.hooked)
 		{
 			this.setupAddon();
-
-			// Load data about existing battles.
-			this.addonManager.load();
 		}
 		else
 		{
 			this.logError("Dragon Fights could not hook into any GameMode.");
 			this.setState(State.DISABLED);
 		}
+	}
+
+
+	/**
+	 * Load dragons when everything is loaded.
+	 */
+	@Override
+	public void allLoaded()
+	{
+		super.allLoaded();
+		this.addonManager.load();
 	}
 
 
