@@ -9,9 +9,11 @@ package lv.id.bonne.dragonfights.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 import lv.id.bonne.custombattle.CustomDragonBattle;
 import lv.id.bonne.custombattle.DragonBattleBuilder;
@@ -312,6 +314,7 @@ public class DragonFightManager
 	public CustomDragonBattle createDragonBattle(World world, Island island)
 	{
 		DragonFightsObject dragonFightsObject = this.getIslandData(island);
+		dragonFightsObject.setWorld(world);
 
 		DragonBattleBuilder dragonBattleBuilder = CustomEntityAPI.getAPI().createDragonBattleBuilder(island.getUniqueId());
 		dragonBattleBuilder.setDragonKilled(true);
@@ -368,15 +371,7 @@ public class DragonFightManager
 	public void startBattleTask(DragonFightsObject databaseObject, CustomDragonBattle battle, long delay)
 	{
 		Bukkit.getScheduler().runTaskTimer(BentoBox.getInstance(),
-			task -> {
-				battle.tickBattle();
-
-				if (battle.isFinished())
-				{
-					this.finishTheBattle(databaseObject, battle);
-					task.cancel();
-				}
-			},
+			new BattleTick(databaseObject, battle),
 			delay,
 			1);
 	}
@@ -393,6 +388,107 @@ public class DragonFightManager
 		databaseObject.setLatestBattleData("");
 		databaseObject.setDragonsKilled(databaseObject.getDragonsKilled() + 1);
 		databaseObject.setPortalLocation(battle.getGeneratedPortalLocation());
+		// Sava data.
+		this.saveDragonFightsData(databaseObject);
+	}
+
+
+// ---------------------------------------------------------------------
+// Section: Classes
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * This class process battle ticking.
+	 */
+	private class BattleTick implements Consumer<BukkitTask>
+	{
+		/**
+		 * Instantiates a new Battle tick.
+		 *
+		 * @param databaseObject the database object
+		 * @param battle the battle
+		 */
+		protected BattleTick(DragonFightsObject databaseObject, CustomDragonBattle battle)
+		{
+			this.databaseObject = databaseObject;
+			this.battle = battle;
+		}
+
+		@Override
+		public void accept(BukkitTask task)
+		{
+			boolean loadedChunks;
+
+			if (this.continueChecks &&
+				this.battle.getLastDragonUUID() != null &&
+				this.battle.getLastDragonLocation() != null)
+			{
+				int chunkX = this.battle.getLastDragonLocation().getBlockX() >> 4;
+				int chunkZ = this.battle.getLastDragonLocation().getBlockZ() >> 4;
+
+				// Get world.
+				World world = this.databaseObject.getWorld();
+
+				// Check if chunks are loaded try to find dragon entity.
+				if (world.isChunkLoaded(chunkX, chunkZ))
+				{
+					// Find entity with a given id.
+					// Wait 5 seconds till restart the dragon
+					// Dragon exists... load the battle
+					loadedChunks = this.ticksWithoutDragons++ > 5 * 20 ||
+						world.getLivingEntities().stream().anyMatch(entity ->
+							entity.getUniqueId().equals(this.battle.getLastDragonUUID()));
+				}
+				else
+				{
+					loadedChunks = false;
+				}
+			}
+			else
+			{
+				// No portal location means that battle must be force started.
+				loadedChunks = true;
+			}
+
+			if (loadedChunks)
+			{
+				this.battle.tickBattle();
+
+				if (this.battle.isFinished())
+				{
+					DragonFightManager.this.finishTheBattle(this.databaseObject, this.battle);
+					task.cancel();
+				}
+
+				this.continueChecks = false;
+			}
+		}
+
+
+	// ---------------------------------------------------------------------
+	// Section: Variables
+	// ---------------------------------------------------------------------
+
+		/**
+		 * Boolean that enables entity searching.
+		 */
+		private boolean continueChecks = true;
+
+		/**
+		 * This method checks ticks without living dragon.
+		 */
+		private int ticksWithoutDragons;
+
+		/**
+		 * Database object instance.
+		 */
+		private final DragonFightsObject databaseObject;
+
+		/**
+		 * Battle object instance.
+		 */
+		private final CustomDragonBattle battle;
 	}
 
 
