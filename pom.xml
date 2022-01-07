@@ -17,16 +17,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
 		<powermock.version>1.7.4</powermock.version>
 		<!-- More visible way how to change dependency versions -->
-		<spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
-		<bentobox.version>1.17.3</bentobox.version>
+		<spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
+		<bentobox.version>1.16.6</bentobox.version>
 		<level.version>2.5.0</level.version>
 		<!-- Revision variable removes warning about dynamic version -->
 		<revision>${build.version}-SNAPSHOT</revision>
 		<!-- This allows to change between versions and snapshots. -->
-		<build.version>1.4.0</build.version>
+		<build.version>1.0.5</build.version>
 		<build.number>-LOCAL</build.number>
 	</properties>
 
@@ -177,7 +177,25 @@
 		</dependency>
 		<dependency>
 			<groupId>lv.id.bonne</groupId>
-			<artifactId>dragonfights-v1_18_r1</artifactId>
+			<artifactId>dragonfights-v1_15_r1</artifactId>
+			<version>1.3.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_16_r1</artifactId>
+			<version>1.3.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_16_r2</artifactId>
+			<version>1.3.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_16_r3</artifactId>
 			<version>1.3.0</version>
 			<scope>compile</scope>
 		</dependency>
