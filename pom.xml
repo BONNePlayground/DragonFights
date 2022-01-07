@@ -58,7 +58,7 @@
 			<activation>
 				<property>
 					<name>env.GIT_BRANCH</name>
-					<value>origin/master</value>
+					<value>origin/v1-16</value>
 				</property>
 			</activation>
 			<properties>
