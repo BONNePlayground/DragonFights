@@ -103,9 +103,12 @@ public class DragonFightsAddon extends Addon
 	public void allLoaded()
 	{
 		super.allLoaded();
-		this.addonManager.load();
-	}
 
+		if (this.getState() == State.ENABLED)
+		{
+			this.addonManager.load();
+		}
+	}
 
 	/**
 	 * This method hooks addon into GameMode.
