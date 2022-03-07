@@ -19,7 +19,7 @@ import world.bentobox.bentobox.api.addons.Pladdon;
  * @author tastybento
  */
 @Plugin(name="Pladdon", version="1.0")
-@ApiVersion(ApiVersion.Target.v1_17)
+@ApiVersion(ApiVersion.Target.v1_18)
 @Dependency(value = "BentoBox")
 public class DragonFightsPladdon extends Pladdon
 {
