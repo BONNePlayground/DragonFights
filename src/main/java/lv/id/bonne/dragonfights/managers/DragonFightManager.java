@@ -336,6 +336,7 @@ public class DragonFightManager
 		dragonBattleBuilder.setBattleSeed(this.addon.getSettings().getBattleSeed());
 		dragonBattleBuilder.setNumberOfTowers(this.addon.getSettings().getTowerCount());
 		dragonBattleBuilder.setNumberOfProtectedTowers(this.addon.getSettings().getNumberOfProtectedTowers());
+		dragonBattleBuilder.setNumberOfPathPoints(this.addon.getSettings().getNumberOfPathPoints());
 		dragonBattleBuilder.setMaxTowerHeight(this.addon.getSettings().getMaxTowerHeight());
 		dragonBattleBuilder.setMinTowerHeight(this.addon.getSettings().getMinTowerHeight());
 		dragonBattleBuilder.setDistanceTillTowers(this.addon.getSettings().getTowerDistance());

@@ -296,6 +296,28 @@ public class Settings implements ConfigObject
 	}
 
 
+	/**
+	 * Gets number of path points.
+	 *
+	 * @return the number of path points
+	 */
+	public int getNumberOfPathPoints()
+	{
+		return numberOfPathPoints;
+	}
+
+
+	/**
+	 * Sets number of path points.
+	 *
+	 * @param numberOfPathPoints the number of path points
+	 */
+	public void setNumberOfPathPoints(int numberOfPathPoints)
+	{
+		this.numberOfPathPoints = Math.max(4, numberOfPathPoints);
+	}
+
+
 	// ---------------------------------------------------------------------
 	// Section: Variables
 	// ---------------------------------------------------------------------
@@ -323,6 +345,12 @@ public class Settings implements ConfigObject
 	@ConfigComment("Default value is 12.")
 	@ConfigEntry(path = "battle.tower-count")
 	private int towerCount = 12;
+
+	@ConfigComment("Number of inner path points for dragon to fly between towers and end trophy generated for the battle.")
+	@ConfigComment("It is recommended to set it to the half of the tower numbers, but never less than 4.")
+	@ConfigComment("Default value is 6. Minimal value is 4.")
+	@ConfigEntry(path = "battle.inner-path-point-count")
+	private int numberOfPathPoints = 6;
 
 	@ConfigComment("Distance from portal till the towers.")
 	@ConfigComment("Default value is 40.")
