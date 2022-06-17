@@ -81,6 +81,13 @@ public class ActivationListener implements Listener
 
 		Island island = islandOptional.get();
 
+		if (island.getCenter().getBlockX() == 0 && island.getCenter().getBlockZ() == 0)
+		{
+			// Dragon should not operate for 0, 0 island because that spot is reserved for
+			// vanilla ender dragon.
+			return;
+		}
+
 		if (island.getRank(User.getInstance(event.getPlayer())) < RanksManager.MEMBER_RANK)
 		{
 			// Only island members should activate the battle.
@@ -181,6 +188,13 @@ public class ActivationListener implements Listener
 		}
 
 		Island island = optionalIsland.get();
+
+		if (island.getCenter().getBlockX() == 0 && island.getCenter().getBlockZ() == 0)
+		{
+			// Dragon should not operate for 0, 0 island because that spot is reserved for
+			// vanilla ender dragon.
+			return;
+		}
 
 		Optional<CustomDragonBattle> optionalBattle =
 			this.addonManager.getDragonBattle(island.getUniqueId());
