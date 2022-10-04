@@ -26,7 +26,7 @@
 		<!-- Revision variable removes warning about dynamic version -->
 		<revision>${build.version}-SNAPSHOT</revision>
 		<!-- This allows to change between versions and snapshots. -->
-		<build.version>1.4.2</build.version>
+		<build.version>1.4.3</build.version>
 		<build.number>-LOCAL</build.number>
 	</properties>
 
@@ -190,7 +190,7 @@
 		<dependency>
 			<groupId>lv.id.bonne</groupId>
 			<artifactId>dragonfights-v1_19_r1</artifactId>
-			<version>1.4.1</version>
+			<version>1.4.2</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
