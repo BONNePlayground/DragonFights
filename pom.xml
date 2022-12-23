@@ -20,13 +20,13 @@
 		<java.version>17</java.version>
 		<powermock.version>1.7.4</powermock.version>
 		<!-- More visible way how to change dependency versions -->
-		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
+		<spigot.version>1.19.3-R0.1-SNAPSHOT</spigot.version>
 		<bentobox.version>1.20.0</bentobox.version>
 		<level.version>2.5.0</level.version>
 		<!-- Revision variable removes warning about dynamic version -->
 		<revision>${build.version}-SNAPSHOT</revision>
 		<!-- This allows to change between versions and snapshots. -->
-		<build.version>1.4.3</build.version>
+		<build.version>1.4.4</build.version>
 		<build.number>-LOCAL</build.number>
 	</properties>
 
@@ -116,6 +116,10 @@
 			<name>GitHub BONNe Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/BONNePlayground/DragonFightsLibrary</url>
 		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
+		</repository>
 	</repositories>
 
 	<distributionManagement>
@@ -172,7 +176,7 @@
 		<dependency>
 			<groupId>io.github.iltotore</groupId>
 			<artifactId>customentity</artifactId>
-			<version>1.4.1</version>
+			<version>1.4.3</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -190,7 +194,13 @@
 		<dependency>
 			<groupId>lv.id.bonne</groupId>
 			<artifactId>dragonfights-v1_19_r1</artifactId>
-			<version>1.4.2</version>
+			<version>1.4.3</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_19_r2</artifactId>
+			<version>1.4.3</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

@@ -25,6 +25,7 @@ import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.util.Util;
 
 
 /**
@@ -118,17 +119,27 @@ public class DragonFightManager
 			{
 				DragonBattleBuilder builder =
 					CustomEntityAPI.getAPI().createDragonBattleBuilder(dragonFightsObject.getUniqueId());
-				builder.setWorld(dragonFightsObject.getWorld());
 
-				CustomDragonBattle customDragonBattle =
-					builder.buildFromNBT(dragonFightsObject.getLatestBattleData());
-
-				this.generatedBattles.put(dragonFightsObject.getUniqueId(), customDragonBattle);
-
-				if (customDragonBattle != null)
+				// Fixes a crash when addon tries to load in non-existing world.
+				if (this.addon.getAddonManager().operatesInWorld(dragonFightsObject.getWorld()))
 				{
-					// Start the battle with 5 sec delay.
-					this.startBattleTask(dragonFightsObject, customDragonBattle, 20 * 5);
+					builder.setWorld(dragonFightsObject.getWorld());
+
+					CustomDragonBattle customDragonBattle =
+						builder.buildFromNBT(dragonFightsObject.getLatestBattleData());
+
+					this.generatedBattles.put(dragonFightsObject.getUniqueId(), customDragonBattle);
+
+					if (customDragonBattle != null)
+					{
+						// Start the battle with 5 sec delay.
+						this.startBattleTask(dragonFightsObject, customDragonBattle, 20 * 5);
+					}
+				}
+				else
+				{
+					// remove fight from cache.
+					this.dragonFightsCache.remove(dragonFightsObject.getUniqueId());
 				}
 			}
 		});
