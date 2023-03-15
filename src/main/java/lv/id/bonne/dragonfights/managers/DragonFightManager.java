@@ -8,7 +8,12 @@ package lv.id.bonne.dragonfights.managers;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +30,6 @@ import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.util.Util;
 
 
 /**
@@ -446,11 +450,17 @@ public class DragonFightManager
 				if (world.isChunkLoaded(chunkX, chunkZ))
 				{
 					// Find entity with a given id.
-					// Wait 5 seconds till restart the dragon
+					// Wait 10 seconds till restart the dragon
 					// Dragon exists... load the battle
-					loadedChunks = this.ticksWithoutDragons++ > 5 * 20 ||
-						world.getLivingEntities().stream().anyMatch(entity ->
-							entity.getUniqueId().equals(this.battle.getLastDragonUUID()));
+					loadedChunks = this.ticksWithoutDragons++ > 10 * 20 ||
+						!world.getNearbyEntities(
+							this.battle.getLastDragonLocation().toLocation(world),
+								32,
+								32,
+								32,
+								entity -> entity.getType().equals(EntityType.ENDER_DRAGON) &&
+									entity.getUniqueId().equals(this.battle.getLastDragonUUID())).
+							isEmpty();
 				}
 				else
 				{
@@ -469,7 +479,9 @@ public class DragonFightManager
 
 				if (this.battle.isFinished())
 				{
+					// Save data
 					DragonFightManager.this.finishTheBattle(this.databaseObject, this.battle);
+					// Cancel task.
 					task.cancel();
 				}
 
