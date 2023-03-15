@@ -409,6 +409,66 @@ public class DragonFightManager
 	}
 
 
+	/**
+	 * This method grants the given list of advancements to all players on the given island.
+	 * @param island island which players receives advancements.
+	 * @param advancementList The list of advancements.
+	 */
+	public void grantAdvancements(Island island, Map<String, String> advancementList)
+	{
+		if (advancementList.isEmpty())
+		{
+			// No advancements in this category.
+			return;
+		}
+
+		island.getPlayersOnIsland().forEach(player -> {
+			// only to players in end dimension.
+			if (World.Environment.THE_END.equals(player.getWorld().getEnvironment()))
+			{
+				this.grantAdvancements(player, advancementList);
+			}
+		});
+	}
+
+
+	/**
+	 * This method grants the given list of advancements to the player.
+	 * @param player Player who receives advancements.
+	 * @param advancementList The list of advancements.
+	 */
+	public void grantAdvancements(Player player, Map<String, String> advancementList)
+	{
+		if (advancementList.isEmpty())
+		{
+			// No advancements in this category.
+			return;
+		}
+
+		advancementList.forEach((advancementID, criteria) ->
+		{
+			NamespacedKey namespacedKey = NamespacedKey.fromString(advancementID);
+
+			if (namespacedKey != null)
+			{
+				Advancement advancement = Bukkit.getAdvancement(namespacedKey);
+
+				if (advancement != null)
+				{
+					AdvancementProgress advancementProgress = player.getAdvancementProgress(advancement);
+
+					// Only for players that does not have it.
+
+					if (!advancementProgress.isDone())
+					{
+						advancementProgress.awardCriteria(criteria);
+					}
+				}
+			}
+		});
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Classes
 // ---------------------------------------------------------------------

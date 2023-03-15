@@ -43,6 +43,35 @@ battle:
   # Battle Seed is a semi-random number that generates towers in the end.
   # This allows to give equal arena for each player.
   battle-seed: 0
+advancements:
+  # Set of advancements that will be granted upon summoning dragon for the first time.
+  # This will be granted to all players who is in the end when dragon is summoned.
+  # Syntax: <advancement_id>: <criteria>
+  # Default value: {}
+  summon: {}
+  # Set of advancements that will be granted upon resummoning dragon.
+  # This will be granted to all players who is in the end when dragon is summoned.
+  # Syntax: <advancement_id>: <criteria>
+  # Default value:
+  # 	minecraft:end/respawn_dragon: summoned_dragon
+  resummon:
+    minecraft:end/respawn_dragon: summoned_dragon
+  # Set of advancements that will be granted upon killing dragon.
+  # This will be granted to the player who killed the dragon.
+  # Syntax: <advancement_id>: <criteria>
+  # Default value:
+  # 	minecraft:end/kill_dragon: killed_dragon
+  # 	minecraft:adventure/kill_a_mob: minecraft:ender_dragon
+  # 	minecraft:adventure/kill_all_mobs: minecraft:ender_dragon
+  killer:
+    minecraft:adventure/kill_a_mob: minecraft:ender_dragon
+    minecraft:end/kill_dragon: killed_dragon
+    minecraft:adventure/kill_all_mobs: minecraft:ender_dragon
+  # Set of advancements that will be granted upon killing dragon.
+  # This will be granted to all players who is in the end when dragon is killed.
+  # Syntax: <advancement_id>: <criteria>
+  # Default value: {}
+  killed: {}
 #
 # This list stores GameModes in which DragonFights addon should not work.
 # To disable addon it is necessary to write its name in new line that starts with -. Example:

@@ -3,7 +3,9 @@ package lv.id.bonne.dragonfights.config;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import world.bentobox.bentobox.api.configuration.ConfigComment;
@@ -318,6 +320,94 @@ public class Settings implements ConfigObject
 	}
 
 
+	/**
+	 * Gets summon advancement list.
+	 *
+	 * @return the summon advancement list
+	 */
+	public Map<String, String> getSummonAdvancementList()
+	{
+		return summonAdvancementList;
+	}
+
+
+	/**
+	 * Sets summon advancement list.
+	 *
+	 * @param summonAdvancementList the summon advancement list
+	 */
+	public void setSummonAdvancementList(Map<String, String> summonAdvancementList)
+	{
+		this.summonAdvancementList = summonAdvancementList;
+	}
+
+
+	/**
+	 * Gets re summon advancement list.
+	 *
+	 * @return the re summon advancement list
+	 */
+	public Map<String, String> getReSummonAdvancementList()
+	{
+		return reSummonAdvancementList;
+	}
+
+
+	/**
+	 * Sets re summon advancement list.
+	 *
+	 * @param reSummonAdvancementList the re summon advancement list
+	 */
+	public void setReSummonAdvancementList(Map<String, String> reSummonAdvancementList)
+	{
+		this.reSummonAdvancementList = reSummonAdvancementList;
+	}
+
+
+	/**
+	 * Gets killer advancement list.
+	 *
+	 * @return the killer advancement list
+	 */
+	public Map<String, String> getKillerAdvancementList()
+	{
+		return killerAdvancementList;
+	}
+
+
+	/**
+	 * Sets killer advancement list.
+	 *
+	 * @param killerAdvancementList the killer advancement list
+	 */
+	public void setKillerAdvancementList(Map<String, String> killerAdvancementList)
+	{
+		this.killerAdvancementList = killerAdvancementList;
+	}
+
+
+	/**
+	 * Gets killed advancement list.
+	 *
+	 * @return the killed advancement list
+	 */
+	public Map<String, String> getKilledAdvancementList()
+	{
+		return killedAdvancementList;
+	}
+
+
+	/**
+	 * Sets killed advancement list.
+	 *
+	 * @param killedAdvancementList the killed advancement list
+	 */
+	public void setKilledAdvancementList(Map<String, String> killedAdvancementList)
+	{
+		this.killedAdvancementList = killedAdvancementList;
+	}
+
+
 	// ---------------------------------------------------------------------
 	// Section: Variables
 	// ---------------------------------------------------------------------
@@ -386,6 +476,41 @@ public class Settings implements ConfigObject
 	@ConfigComment("This allows to give equal arena for each player.")
 	@ConfigEntry(path = "battle.battle-seed")
 	private long battleSeed = 0;
+
+	@ConfigComment("Set of advancements that will be granted upon summoning dragon for the first time.")
+	@ConfigComment("This will be granted to all players who is in the end when dragon is summoned.")
+	@ConfigComment("Syntax: <advancement_id>: <criteria>")
+	@ConfigComment("Default value: {}")
+	@ConfigEntry(path = "advancements.summon")
+	private Map<String, String> summonAdvancementList = new HashMap<>();
+
+	@ConfigComment("Set of advancements that will be granted upon resummoning dragon.")
+	@ConfigComment("This will be granted to all players who is in the end when dragon is summoned.")
+	@ConfigComment("Syntax: <advancement_id>: <criteria>")
+	@ConfigComment("Default value:")
+	@ConfigComment("\tminecraft:end/respawn_dragon: summoned_dragon")
+	@ConfigEntry(path = "advancements.resummon")
+	private Map<String, String> reSummonAdvancementList = Map.of("minecraft:end/respawn_dragon", "summoned_dragon");
+
+	@ConfigComment("Set of advancements that will be granted upon killing dragon.")
+	@ConfigComment("This will be granted to the player who killed the dragon.")
+	@ConfigComment("Syntax: <advancement_id>: <criteria>")
+	@ConfigComment("Default value:")
+	@ConfigComment("\tminecraft:end/kill_dragon: killed_dragon")
+	@ConfigComment("\tminecraft:adventure/kill_a_mob: minecraft:ender_dragon")
+	@ConfigComment("\tminecraft:adventure/kill_all_mobs: minecraft:ender_dragon")
+	@ConfigEntry(path = "advancements.killer")
+	private Map<String, String> killerAdvancementList = Map.of(
+		"minecraft:end/kill_dragon", "killed_dragon",
+		"minecraft:adventure/kill_a_mob", "minecraft:ender_dragon",
+		"minecraft:adventure/kill_all_mobs", "minecraft:ender_dragon");
+
+	@ConfigComment("Set of advancements that will be granted upon killing dragon.")
+	@ConfigComment("This will be granted to all players who is in the end when dragon is killed.")
+	@ConfigComment("Syntax: <advancement_id>: <criteria>")
+	@ConfigComment("Default value: {}")
+	@ConfigEntry(path = "advancements.killed")
+	private Map<String, String> killedAdvancementList = new HashMap<>();
 
 	@ConfigComment("")
 	@ConfigComment("This list stores GameModes in which DragonFights addon should not work.")
