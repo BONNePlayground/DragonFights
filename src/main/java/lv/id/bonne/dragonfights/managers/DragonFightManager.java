@@ -404,8 +404,12 @@ public class DragonFightManager
 		databaseObject.setLatestBattleData("");
 		databaseObject.setDragonsKilled(databaseObject.getDragonsKilled() + 1);
 		databaseObject.setPortalLocation(battle.getGeneratedPortalLocation());
+
 		// Sava data.
 		this.saveDragonFightsData(databaseObject);
+
+		// Remove battle from cache.
+		this.generatedBattles.remove(databaseObject.getUniqueId());
 	}
 
 
