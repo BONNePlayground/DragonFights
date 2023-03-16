@@ -8,7 +8,12 @@ package lv.id.bonne.dragonfights.managers;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +30,6 @@ import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.util.Util;
 
 
 /**
@@ -400,8 +404,72 @@ public class DragonFightManager
 		databaseObject.setLatestBattleData("");
 		databaseObject.setDragonsKilled(databaseObject.getDragonsKilled() + 1);
 		databaseObject.setPortalLocation(battle.getGeneratedPortalLocation());
+
 		// Sava data.
 		this.saveDragonFightsData(databaseObject);
+
+		// Remove battle from cache.
+		this.generatedBattles.remove(databaseObject.getUniqueId());
+	}
+
+
+	/**
+	 * This method grants the given list of advancements to all players on the given island.
+	 * @param island island which players receives advancements.
+	 * @param advancementList The list of advancements.
+	 */
+	public void grantAdvancements(Island island, Map<String, String> advancementList)
+	{
+		if (advancementList.isEmpty())
+		{
+			// No advancements in this category.
+			return;
+		}
+
+		island.getPlayersOnIsland().forEach(player -> {
+			// only to players in end dimension.
+			if (World.Environment.THE_END.equals(player.getWorld().getEnvironment()))
+			{
+				this.grantAdvancements(player, advancementList);
+			}
+		});
+	}
+
+
+	/**
+	 * This method grants the given list of advancements to the player.
+	 * @param player Player who receives advancements.
+	 * @param advancementList The list of advancements.
+	 */
+	public void grantAdvancements(Player player, Map<String, String> advancementList)
+	{
+		if (advancementList.isEmpty())
+		{
+			// No advancements in this category.
+			return;
+		}
+
+		advancementList.forEach((advancementID, criteria) ->
+		{
+			NamespacedKey namespacedKey = NamespacedKey.fromString(advancementID);
+
+			if (namespacedKey != null)
+			{
+				Advancement advancement = Bukkit.getAdvancement(namespacedKey);
+
+				if (advancement != null)
+				{
+					AdvancementProgress advancementProgress = player.getAdvancementProgress(advancement);
+
+					// Only for players that does not have it.
+
+					if (!advancementProgress.isDone())
+					{
+						advancementProgress.awardCriteria(criteria);
+					}
+				}
+			}
+		});
 	}
 
 
@@ -446,11 +514,17 @@ public class DragonFightManager
 				if (world.isChunkLoaded(chunkX, chunkZ))
 				{
 					// Find entity with a given id.
-					// Wait 5 seconds till restart the dragon
+					// Wait 10 seconds till restart the dragon
 					// Dragon exists... load the battle
-					loadedChunks = this.ticksWithoutDragons++ > 5 * 20 ||
-						world.getLivingEntities().stream().anyMatch(entity ->
-							entity.getUniqueId().equals(this.battle.getLastDragonUUID()));
+					loadedChunks = this.ticksWithoutDragons++ > 10 * 20 ||
+						!world.getNearbyEntities(
+							this.battle.getLastDragonLocation().toLocation(world),
+								32,
+								32,
+								32,
+								entity -> entity.getType().equals(EntityType.ENDER_DRAGON) &&
+									entity.getUniqueId().equals(this.battle.getLastDragonUUID())).
+							isEmpty();
 				}
 				else
 				{
@@ -469,7 +543,9 @@ public class DragonFightManager
 
 				if (this.battle.isFinished())
 				{
+					// Save data
 					DragonFightManager.this.finishTheBattle(this.databaseObject, this.battle);
+					// Cancel task.
 					task.cancel();
 				}
 
