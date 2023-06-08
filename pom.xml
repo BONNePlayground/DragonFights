@@ -20,13 +20,13 @@
 		<java.version>17</java.version>
 		<powermock.version>1.7.4</powermock.version>
 		<!-- More visible way how to change dependency versions -->
-		<spigot.version>1.19.4-R0.1-SNAPSHOT</spigot.version>
-		<bentobox.version>1.20.0</bentobox.version>
+		<spigot.version>1.20-R0.1-SNAPSHOT</spigot.version>
+		<bentobox.version>1.23.0</bentobox.version>
 		<level.version>2.5.0</level.version>
 		<!-- Revision variable removes warning about dynamic version -->
 		<revision>${build.version}-SNAPSHOT</revision>
 		<!-- This allows to change between versions and snapshots. -->
-		<build.version>1.6.0</build.version>
+		<build.version>1.7.0</build.version>
 		<build.number>-LOCAL</build.number>
 	</properties>
 
@@ -170,19 +170,7 @@
 		<dependency>
 			<groupId>io.github.iltotore</groupId>
 			<artifactId>customentity</artifactId>
-			<version>1.5.0</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>lv.id.bonne</groupId>
-			<artifactId>dragonfights-v1_18_r1</artifactId>
-			<version>1.5.0</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>lv.id.bonne</groupId>
-			<artifactId>dragonfights-v1_18_r2</artifactId>
-			<version>1.5.0</version>
+			<version>1.6.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -201,6 +189,12 @@
 			<groupId>lv.id.bonne</groupId>
 			<artifactId>dragonfights-v1_19_r3</artifactId>
 			<version>1.5.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>lv.id.bonne</groupId>
+			<artifactId>dragonfights-v1_20_r1</artifactId>
+			<version>1.6.0</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
