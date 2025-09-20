@@ -7,7 +7,7 @@ This is DragonFights Addon for BentoBox plugin.
 # INFO
 
 This addon does not work past Minecraft 1.20.4 due to changes how Minecraft handles entity registry. It used a loophole that allowed the introduction of a custom vanilla entity with custom AI tasks.
-Unfortunately, they removed it, so the addon needs a complete rework and works with Vanilla EnderDragon AI.
+Unfortunately, they removed it, so the addon needs a complete rework so it would use Vanilla EnderDragon AI.
 
 ## How to install
 
